@@ -1,0 +1,20 @@
+{
+  "name": "job-helper",
+  "version": "0.0.1",
+  "description": "Simple app for helping you with your job",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "sav": "electron-packager . job-helper --overwrite  --platform=win32 --arch=ia32 --icon=files/appicon.ico --prune=true --out=build --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Job Helper\""
+  },
+  "repository": "https://github.com/f3desha/job-helper",
+  "keywords": [],
+  "author": "Oleksandr Kuzmenko",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "@electron/remote": "^2.0.8",
+    "chromedriver": "^106.0.1",
+    "electron": "^21.1.0",
+    "selenium-webdriver": "^4.5.0"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="./styles/core.css" />
+    <link rel="stylesheet" href="./styles/elements.css" />
+    <title>Job Helper by Oleksandr Kuzmenko © #StandWithUkraine 2022</title>
+  </head>
+  <body>
+    <div class="main">
+      <div id="avatar-block">
+        
+      </div>
+      <div class="validation-bar">
+        <span id="taskbar" class="success">Module started...</span>
+      </div>
+    </div>
+    <!-- You can also require other files to run in this process -->
+    <script  src="./renderer.js"></script>
+    
+  </body>
+</html>
