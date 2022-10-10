@@ -43,11 +43,16 @@ const template = [
     label: 'Tasks',
     submenu: [
       {
-        label: 'Add Contacts',
-        accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
-        click (item, focusedWindow) {
-        if (focusedWindow) getAddContacts();
-       }
+        label: 'LinkedIn',
+        submenu: [
+          {
+            label: 'Add Contacts',
+            accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
+            click (item, focusedWindow) {
+              if (focusedWindow) getAddContacts();
+            }
+          }
+        ]
       },
     ]
   },
