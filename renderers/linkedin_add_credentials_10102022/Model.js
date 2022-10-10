@@ -28,32 +28,49 @@ module.exports = class Model extends BaseModel {
                 },
             },
         };
-    
+
+        this.windowElements.spans.login.init = () => {
+            DS.get('spans','login').value = linkedinUserConfig.username;
+        };
+
+        this.windowElements.spans.password.init = () => {
+            DS.get('spans','password').value = linkedinUserConfig.password;
+        };
+
         this.windowElements.buttons.getit.init = () => {
+
             DS.get('buttons','getit').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 
-                if (DS.get('spans','login').value === '') {
-                    DS.addError('Error: Login must not be empty');
+                if (DS.get('spans','login').value !== '') {
+                    if (!String(DS.get('spans','login').value)
+                        .toLowerCase()
+                        .match(
+                            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        )) {
+                        DS.addError('Error: Login should have email format');
+                    }
                 }
 
-                if (!String(DS.get('spans','login').value)
-                    .toLowerCase()
-                    .match(
-                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                )) {
-                    DS.addError('Error: Login should have email format');
+                if ((DS.get('spans','login').value === '' && DS.get('spans','password').value !== '')) {
+                    DS.addError('Error: Login shouldnt be empty');
                 }
 
-                if (DS.get('spans','password').value === '') {
-                    DS.addError('Error: Password must not be empty');
+                if ((DS.get('spans','password').value === '' && DS.get('spans','login').value !== '')) {
+                    DS.addError('Error: Password shouldnt be empty');
                 }
 
                 // Execution
                 DS.validate(() => {
-                    DS.get('spans','validation_bar').innerHTML = 'Running...';
-
+                    let obj = {
+                        'username': DS.get('spans','login').value,
+                        'password': DS.get('spans','password').value
+                    };
+                    fs.writeFile('./configs/user_linkedin_config.json', JSON.stringify(obj, null, "\t"), function (err) {
+                        if (err) return console.log(err);
+                    });
+                    DS.get('spans','validation_bar').innerHTML = 'Saved';
                 });
 
             });

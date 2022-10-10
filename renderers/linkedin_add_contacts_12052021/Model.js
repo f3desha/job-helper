@@ -34,6 +34,14 @@ module.exports = class Model extends BaseModel {
                 },
             },
         };
+
+        this.windowElements.spans.login.init = () => {
+            DS.get('spans','login').value = linkedinUserConfig.username;
+        };
+
+        this.windowElements.spans.password.init = () => {
+            DS.get('spans','password').value = linkedinUserConfig.password;
+        };
     
         this.windowElements.buttons.getit.init = () => {
             DS.get('buttons','getit').addEventListener("click", function (e) {
