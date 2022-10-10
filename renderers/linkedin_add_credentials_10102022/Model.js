@@ -54,11 +54,11 @@ module.exports = class Model extends BaseModel {
                 }
 
                 if ((DS.get('spans','login').value === '' && DS.get('spans','password').value !== '')) {
-                    DS.addError('Error: Login shouldnt be empty');
+                    DS.addError('Error: Login shouldn\'t be empty');
                 }
 
                 if ((DS.get('spans','password').value === '' && DS.get('spans','login').value !== '')) {
-                    DS.addError('Error: Password shouldnt be empty');
+                    DS.addError('Error: Password shouldn\'t be empty');
                 }
 
                 // Execution
