@@ -9,8 +9,8 @@ module.exports = class Model extends BaseModel {
         //Defining elements location
         this.windowElements = {
             buttons: {
-                getit:    {
-                    location: document.getElementById("getit")
+                start:    {
+                    location: document.getElementById("start")
                 },
                 close:  {
                     location: document.getElementById("close")
@@ -43,8 +43,8 @@ module.exports = class Model extends BaseModel {
             DS.get('spans','password').value = linkedinUserConfig.password;
         };
     
-        this.windowElements.buttons.getit.init = () => {
-            DS.get('buttons','getit').addEventListener("click", function (e) {
+        this.windowElements.buttons.start.init = () => {
+            DS.get('buttons','start').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 

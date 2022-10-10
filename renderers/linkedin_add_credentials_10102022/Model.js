@@ -9,8 +9,11 @@ module.exports = class Model extends BaseModel {
         //Defining elements location
         this.windowElements = {
             buttons: {
-                getit:    {
-                    location: document.getElementById("getit")
+                save:    {
+                    location: document.getElementById("save")
+                },
+                clear:    {
+                    location: document.getElementById("clear")
                 },
                 close:  {
                     location: document.getElementById("close")
@@ -37,9 +40,9 @@ module.exports = class Model extends BaseModel {
             DS.get('spans','password').value = linkedinUserConfig.password;
         };
 
-        this.windowElements.buttons.getit.init = () => {
+        this.windowElements.buttons.save.init = () => {
 
-            DS.get('buttons','getit').addEventListener("click", function (e) {
+            DS.get('buttons','save').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 
@@ -72,6 +75,15 @@ module.exports = class Model extends BaseModel {
                     DS.get('spans','validation_bar').innerHTML = 'Saved';
                 });
 
+            });
+        }
+
+        this.windowElements.buttons.clear.init = () => {
+
+            DS.get('buttons','clear').addEventListener("click", function (e) {
+                DS.get('spans','login').value = '';
+                DS.get('spans','password').value = '';
+                DS.get('spans','validation_bar').innerHTML = 'Cleared';
             });
         }
 
