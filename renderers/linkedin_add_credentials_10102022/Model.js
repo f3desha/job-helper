@@ -1,4 +1,5 @@
 const BaseModel = require("../../modules/Base/BaseModel");
+const nodeConsole = require("console");
 
 module.exports = class Model extends BaseModel {
     constructor(){
@@ -67,14 +68,18 @@ module.exports = class Model extends BaseModel {
                 // Execution
                 DS.validate(() => {
 
-                    fs.writeFile(app.getAppPath()+path.sep+'configs'+path.sep+'user_linkedin_config.json', JSON.stringify({
+                    fs.writeFile(fileHelper.getPath('configs/user_linkedin_config.json'), JSON.stringify({
                         'username': DS.get('spans','login').value,
                         'password': DS.get('spans','password').value
                     }, null, "\t"), function (err) {
-                        if (err) return console.log(err);
+                        if (err) {
+                            console.log(err);
+                        }
+                        else {
+                            let window = require('@electron/remote').getCurrentWindow();
+                            window.close();
+                        }
                     });
-
-                    DS.get('spans','validation_bar').innerHTML = 'Saved';
                 });
 
             });

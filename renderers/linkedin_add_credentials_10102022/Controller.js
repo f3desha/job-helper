@@ -1,8 +1,8 @@
-var {remote} = require('electron');
+var {remote, ipcRenderer} = require('electron');
 const linkedinUserConfig = require('../../configs/user_linkedin_config.json');
 const fs   = require('fs');
-const {app} = require("@electron/remote");
-const path = require('path');
+const fileHelperModule = require('../../modules/file-helper/FileHelper');
+const fileHelper = new fileHelperModule();
 
 const model = require('./Model');
 const DS = new model();
