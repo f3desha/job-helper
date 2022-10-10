@@ -33,7 +33,10 @@ const template = [
   {
     label: 'File',
     submenu: [
-      isMac ? { role: 'close' } : { role: 'quit' },
+      isMac ? { role: 'close' } : {
+          role: 'quit',
+          accelerator: process.platform === 'darwin' ? 'Alt+Q' : 'Alt+Q'
+      },
     ]
   },
   {

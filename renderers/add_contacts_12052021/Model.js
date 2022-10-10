@@ -1,4 +1,5 @@
 const BaseModel = require("../../modules/Base/BaseModel");
+const {until} = require("selenium-webdriver");
 
 module.exports = class Model extends BaseModel {
     constructor(){
@@ -37,7 +38,6 @@ module.exports = class Model extends BaseModel {
     
         this.windowElements.buttons.getit.init = () => {
             DS.get('buttons','getit').addEventListener("click", function (e) {
-                DS.get('spans','validation_bar').innerHTML = 'Launched';
                 //Validation
                 DS.flushErrors();
 
@@ -63,7 +63,7 @@ module.exports = class Model extends BaseModel {
 
                 // Execution
                 DS.validate(() => {
-                    DS.get('spans','validation_bar').innerHTML = 'Launched';
+                    DS.get('spans','validation_bar').innerHTML = 'Running...';
                     (async function start() {
 
                         let driver = new webdriver.Builder()
@@ -107,13 +107,20 @@ module.exports = class Model extends BaseModel {
                                     await driver.sleep(500);
                                     sendNow.click();
 
+                                    driver.wait(until.elementLocated(By.css("div.ip-fuse-limit-alert")), 10000)
+                                        .then(() => {
+                                            driver.quit();
+                                            DS.get('spans','validation_bar').innerHTML = 'Done! Week contacts limit reached.';
+                                        });
+
+
                                 }
                                 await driver.sleep(2000);
                                 pageCounter++;
                             }
 
                         } finally {
-                            // await driver.quit();
+                            await driver.quit();
                         }
                     })();
                 });
