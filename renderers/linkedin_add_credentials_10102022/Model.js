@@ -66,12 +66,14 @@ module.exports = class Model extends BaseModel {
 
                 // Execution
                 DS.validate(() => {
-                    fs.writeFile('./configs/user_linkedin_config.json', JSON.stringify({
+
+                    fs.writeFile(app.getAppPath()+path.sep+'configs'+path.sep+'user_linkedin_config.json', JSON.stringify({
                         'username': DS.get('spans','login').value,
                         'password': DS.get('spans','password').value
                     }, null, "\t"), function (err) {
                         if (err) return console.log(err);
                     });
+
                     DS.get('spans','validation_bar').innerHTML = 'Saved';
                 });
 
