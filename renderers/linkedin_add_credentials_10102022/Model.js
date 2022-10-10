@@ -63,11 +63,10 @@ module.exports = class Model extends BaseModel {
 
                 // Execution
                 DS.validate(() => {
-                    let obj = {
+                    fs.writeFile('./configs/user_linkedin_config.json', JSON.stringify({
                         'username': DS.get('spans','login').value,
                         'password': DS.get('spans','password').value
-                    };
-                    fs.writeFile('./configs/user_linkedin_config.json', JSON.stringify(obj, null, "\t"), function (err) {
+                    }, null, "\t"), function (err) {
                         if (err) return console.log(err);
                     });
                     DS.get('spans','validation_bar').innerHTML = 'Saved';
