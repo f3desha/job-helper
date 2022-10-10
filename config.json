@@ -1,8 +1,13 @@
 {
     "subwindows":
     {
-        "add_contacts_12052021": {
-            "id": "add_contacts_12052021",
+        "linkedin_add_credentials_10102022": {
+            "id": "linkedin_add_credentials_10102022",
+            "width": 400,
+            "height": 210
+        },
+        "linkedin_add_contacts_12052021": {
+            "id": "linkedin_add_contacts_12052021",
             "width": 400,
             "height": 380
         },

@@ -46,10 +46,16 @@ const template = [
         label: 'LinkedIn',
         submenu: [
           {
+            label: 'Add Credentials',
+            click (item, focusedWindow) {
+              if (focusedWindow) getLinkedinAddCredentials();
+            }
+          },
+          {
             label: 'Add Contacts',
             accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
             click (item, focusedWindow) {
-              if (focusedWindow) getAddContacts();
+              if (focusedWindow) getLinkedinAddContacts();
             }
           }
         ]
@@ -81,8 +87,12 @@ mainMenu = Menu.buildFromTemplate(template);
 
 /***********FUNCTIONS******** */
 
-function getAddContacts(){
-  createSubwindow(config.subwindows.add_contacts_12052021);
+function getLinkedinAddCredentials(){
+  createSubwindow(config.subwindows.linkedin_add_credentials_10102022);
+}
+
+function getLinkedinAddContacts(){
+  createSubwindow(config.subwindows.linkedin_add_contacts_12052021);
 }
 
 function getAboutProgram(){
