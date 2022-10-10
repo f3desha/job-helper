@@ -1,5 +1,4 @@
 const BaseModel = require("../../modules/Base/BaseModel");
-const {until} = require("selenium-webdriver");
 
 module.exports = class Model extends BaseModel {
     constructor(){

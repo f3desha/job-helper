@@ -40,7 +40,7 @@ const template = [
     ]
   },
   {
-    label: 'Menu',
+    label: 'Tasks',
     submenu: [
       {
         label: 'Add Contacts',
@@ -52,13 +52,24 @@ const template = [
     ]
   },
   {
-    label: 'View',
+    label: 'Help',
     submenu: [
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { role: 'toggleDevTools' },
+      {
+        label: 'About',
+        click (item, focusedWindow) {
+          if (focusedWindow) getAboutProgram();
+        }
+      },
     ]
-  }
+  },
+  // {
+  //   label: 'View',
+  //   submenu: [
+  //     { role: 'reload' },
+  //     { role: 'forceReload' },
+  //     { role: 'toggleDevTools' },
+  //   ]
+  // }
 ]
 mainMenu = Menu.buildFromTemplate(template);
 /*******MENU TEMPLATE ENDS*****************/
@@ -67,6 +78,10 @@ mainMenu = Menu.buildFromTemplate(template);
 
 function getAddContacts(){
   createSubwindow(config.subwindows.add_contacts_12052021);
+}
+
+function getAboutProgram(){
+  createSubwindow(config.subwindows.about_program_10102022);
 }
 
 function createSubwindow(config){
