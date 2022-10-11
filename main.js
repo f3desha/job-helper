@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, session, dialog, MenuItem} = require('electron');
+const {app, BrowserWindow, Menu} = require('electron');
+
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
 
@@ -8,11 +9,7 @@ const path = require('path')
 const config = require('./config.json');
 const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
-const https = require('https');
-const fs   = require('fs');
-const nodeConsole = require("console");
 const isMac = process.platform === 'darwin'
-let applicationUser = null;
 let mainMenu = null;
 
 

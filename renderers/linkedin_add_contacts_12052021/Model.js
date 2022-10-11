@@ -28,6 +28,16 @@ module.exports = class Model extends BaseModel {
                 },
             },
         };
+
+        this.windowElements.spans.searchFor.init = () => {
+            const defaultSearchKeyword = linkedinUserConfig.addContactsDefaultSearchKeyword;
+            DS.get('spans','searchFor').value = defaultSearchKeyword;
+        }
+
+        this.windowElements.spans.contactMessage.init = () => {
+            const defaultAddContactsMessage = linkedinUserConfig.addContactsDefaultMessage;
+            DS.get('spans','contactMessage').value = defaultAddContactsMessage;
+        }
     
         this.windowElements.buttons.start.init = () => {
             const login = linkedinUserConfig.username;
