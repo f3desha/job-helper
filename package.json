@@ -1,6 +1,6 @@
 {
   "name": "job-helper",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Simple app for helping you with your job",
   "main": "main.js",
   "scripts": {
