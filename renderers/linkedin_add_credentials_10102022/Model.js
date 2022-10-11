@@ -66,8 +66,10 @@ module.exports = class Model extends BaseModel {
 
                 // Execution
                 DS.validate(() => {
+
                     linkedinUserConfig.username = DS.get('spans','login').value;
                     linkedinUserConfig.password = DS.get('spans','password').value;
+
                     fs.writeFile(
                         fileHelper.getPath('configs/user_linkedin_config.json'),
                         JSON.stringify(linkedinUserConfig, null, "\t"), function (err) {

@@ -6,6 +6,8 @@ var webdriver = require('selenium-webdriver');
 const {By,until} = require('selenium-webdriver');
 const userHelperModule = require('../../modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
+const fileHelperModule = require('../../modules/file-helper/FileHelper');
+const fileHelper = new fileHelperModule();
 
 const model = require('./Model');
 const DS = new model();
