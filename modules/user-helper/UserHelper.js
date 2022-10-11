@@ -1,8 +1,12 @@
 const fs = require('fs');
+const {app} = require("electron");
+const fileHelperModule = require('../../modules/file-helper/FileHelper');
+const fileHelper = new fileHelperModule(app);
 
 module.exports = class UserHelper {
+
     isLogined(){
-        let buffer = fs.readFileSync('configs/user_linkedin_config.json');
+        let buffer = fs.readFileSync(fileHelper.getPath('configs/user_linkedin_config.json'));
         const linkedinUserConfig = JSON.parse(buffer);
 
         return linkedinUserConfig.login !== '' && linkedinUserConfig.password !== '';
