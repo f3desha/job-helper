@@ -105,7 +105,7 @@ function getLinkedinAddContacts(){
 }
 
 function getAboutProgram(){
-  createSubwindow(config.subwindows.main.about_program);
+  createSubwindow(config.subwindows.help.about_program);
 }
 
 function createSubwindow(config){

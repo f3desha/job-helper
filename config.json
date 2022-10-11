@@ -15,13 +15,16 @@
                 "height": 300
             }
         },
-        "main": {
+        "help": {
             "about_program": {
                 "id": "about_program",
-                "group": "main",
+                "group": "help",
                 "width": 400,
                 "height": 280
             }
+        },
+        "main": {
+
         }
     }
 }
