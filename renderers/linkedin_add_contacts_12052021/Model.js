@@ -83,7 +83,7 @@ module.exports = class Model extends BaseModel {
                             let pageCounter = 1;
 
                             for (let i = 0; i < 100; i++) {
-                                driver.get('https://www.linkedin.com/search/results/people/?keywords='+DS.get('spans','searchFor').value+'&origin=SWITCH_SEARCH_VERTICAL&page='+pageCounter+'&sid=n61');
+                                driver.get('https://www.linkedin.com/search/results/people/?keywords='+DS.get('spans','searchFor').value+'&origin=SWITCH_SEARCH_VERTICAL&page='+pageCounter+'&sid='+userHelper.generateRandomString(3));
                                 await driver.sleep(5000);
 
                                 let buttonsContainer = await driver.findElements(By.css(".ph0.pv2.artdeco-card.mb2 ul.reusable-search__entity-result-list.list-style-none li div.entity-result__actions.entity-result__divider div button[aria-label^='Пригласить участника']"));
