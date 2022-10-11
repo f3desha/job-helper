@@ -113,7 +113,7 @@ function createSubwindow(config){
     resizable: false,
     width: config.width,
     height: config.height,
-    show: config.show == false ? false : true,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -125,6 +125,9 @@ function createSubwindow(config){
   subWindow.removeMenu();
   subWindow.loadFile(`./renderers/${config.id}/View.html`);
   // subWindow.webContents.openDevTools();
+  subWindow.once('ready-to-show', () => {
+    subWindow.show()
+  });
   return subWindow;
 }
 
