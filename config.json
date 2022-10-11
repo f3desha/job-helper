@@ -1,20 +1,27 @@
 {
     "subwindows":
     {
-        "linkedin_add_credentials_10102022": {
-            "id": "linkedin_add_credentials_10102022",
-            "width": 400,
-            "height": 210
+        "linkedin_tasks": {
+            "add_credentials": {
+                "id": "add_credentials",
+                "group": "linkedin_tasks",
+                "width": 400,
+                "height": 210
+            },
+            "add_contacts": {
+                "id": "add_contacts",
+                "group": "linkedin_tasks",
+                "width": 400,
+                "height": 300
+            }
         },
-        "linkedin_add_contacts_12052021": {
-            "id": "linkedin_add_contacts_12052021",
-            "width": 400,
-            "height": 300
-        },
-        "about_program_10102022": {
-            "id": "about_program_10102022",
-            "width": 400,
-            "height": 280
+        "main": {
+            "about_program": {
+                "id": "about_program",
+                "group": "main",
+                "width": 400,
+                "height": 280
+            }
         }
     }
 }

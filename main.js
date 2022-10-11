@@ -97,15 +97,15 @@ mainMenu = Menu.buildFromTemplate(template);
 /***********FUNCTIONS******** */
 
 function getLinkedinAddCredentials(){
-  createSubwindow(config.subwindows.linkedin_add_credentials_10102022);
+  createSubwindow(config.subwindows.linkedin_tasks.add_credentials);
 }
 
 function getLinkedinAddContacts(){
-  createSubwindow(config.subwindows.linkedin_add_contacts_12052021);
+  createSubwindow(config.subwindows.linkedin_tasks.add_contacts);
 }
 
 function getAboutProgram(){
-  createSubwindow(config.subwindows.about_program_10102022);
+  createSubwindow(config.subwindows.main.about_program);
 }
 
 function createSubwindow(config){
@@ -123,7 +123,7 @@ function createSubwindow(config){
   remoteMain.enable(subWindow.webContents);
   subWindow.setIcon(path.join(__dirname, '/files/appicon.png'));
   subWindow.removeMenu();
-  subWindow.loadFile(`./renderers/${config.id}/View.html`);
+  subWindow.loadFile(`./renderers/${config.group}/${config.id}/View.html`);
   // subWindow.webContents.openDevTools();
   subWindow.once('ready-to-show', () => {
     subWindow.show()
