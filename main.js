@@ -146,6 +146,7 @@ function createMainWindow () {
     minHeight: 720,
     width: 1280,
     height: 720,
+    show: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -158,6 +159,9 @@ function createMainWindow () {
   mainWindow.setIcon(path.join(__dirname, '/files/appicon.png'));
   mainWindow.loadFile('./index.html');
   mainWindow.maximize();
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+  });
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
