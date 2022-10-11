@@ -6,8 +6,11 @@ remoteMain.initialize()
 const ipcMain = require('electron').ipcMain;
 const path = require('path')
 const config = require('./config.json');
+const userHelperModule = require('./modules/user-helper/UserHelper');
+const userHelper = new userHelperModule();
 const https = require('https');
 const fs   = require('fs');
+const nodeConsole = require("console");
 const isMac = process.platform === 'darwin'
 let applicationUser = null;
 let mainMenu = null;
@@ -46,12 +49,21 @@ const template = [
         label: 'LinkedIn',
         submenu: [
           {
-            label: 'Add Credentials',
+            id: 'linkedin-login',
+            label: 'Login...',
             click (item, focusedWindow) {
               if (focusedWindow) getLinkedinAddCredentials();
             }
           },
           {
+            id: 'linkedin-credentials',
+            label: 'Credentials',
+            click (item, focusedWindow) {
+              if (focusedWindow) getLinkedinAddCredentials();
+            }
+          },
+          {
+            id: 'linkedin-add-contacts',
             label: 'Add Contacts',
             accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
             click (item, focusedWindow) {
@@ -123,6 +135,12 @@ function createMainMenu(){
   Menu.setApplicationMenu(mainMenu)
 }
 
+function refreshMainMenu(){
+  mainMenu.getMenuItemById('linkedin-login').visible = !userHelper.isLogined();
+  mainMenu.getMenuItemById('linkedin-credentials').visible = userHelper.isLogined();
+  mainMenu.getMenuItemById('linkedin-add-contacts').enabled = userHelper.isLogined();
+}
+
 function createMainWindow () {
 
   // Create the browser window.
@@ -155,6 +173,7 @@ function createMainWindow () {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createMainMenu()
+  refreshMainMenu()
   createMainWindow()
 
   // app.on('activate', function () {
@@ -180,69 +199,7 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-ipcMain.on('oauth-link-received', function(event1, args) {
-  const subWindow = new BrowserWindow({
-    frame: false,
-    minWidth: 700,
-    minHeight: 700,
-    width: 700,
-    height: 700,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true
-    }
-  });
-  subWindow.removeMenu();
-  subWindow.loadURL(args.url);
-  subWindow.webContents.on('did-redirect-navigation', function (event2, newUrl) {
-    var urlParams = new URLSearchParams(newUrl);
-      /////////////////////////
-    if(urlParams.has('https://thawing-bastion-45853.herokuapp.com/api/v1/callback?code')){
-      subWindow.webContents.executeJavaScript(`function gethtml () {
-        return new Promise((resolve, reject) => { resolve(document.getElementById('access_token').innerHTML); });
-        }
-        gethtml();`).then((html) => {
-
-          const cookie = { url: 'https://www.linkedin.com', name: 'auth_token', value: html }
-          session.defaultSession.cookies.set(cookie)
-          .then(() => {
-            session.defaultSession.cookies.get({name: 'auth_token', domain: 'www.linkedin.com'})
-            .then((cookies) => {
-              let tempToken = cookies[0].value;
-              event1.sender.send('token-received',true);
-              mainWindow.webContents.send('profile-update',tempToken);
-              subWindow.close();
-              userLoggedIn();
-            }).catch((error) => {
-              console.log(error)
-            })
-          }, (error) => {
-            console.error(error)
-          })
-
-      })
-      ////////////////////////
-
-    }
-
-    // More complex code to handle tokens goes here
-});
-});
-
-ipcMain.on('user-init', (event, obj) => {
-
-  applicationUser = {
-    id: 'session_user_object',
-    firstName: obj.firstName,
-    lastName: obj.lastName,
-    linkedin_id: obj.user_id,
-    avatarPath: './files/images/avatars/'+obj.user_id+'.jpg',
-    auth_token: obj.auth_token
-  };
-  console.log(applicationUser);
-
-  download(obj.url, obj.user_id+'.jpg').then(function(data){
-    mainWindow.webContents.send('avatar-uploaded',obj);
-  });
+ipcMain.on('login-event', function(event1, args) {
+    refreshMainMenu();
 });
 /*************LISTENERS END********* */

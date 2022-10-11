@@ -1,5 +1,4 @@
 const BaseModel = require("../../modules/Base/BaseModel");
-const nodeConsole = require("console");
 
 module.exports = class Model extends BaseModel {
     constructor(){
@@ -76,6 +75,7 @@ module.exports = class Model extends BaseModel {
                             console.log(err);
                         }
                         else {
+                            ipcRenderer.send('login-event', []);
                             let window = require('@electron/remote').getCurrentWindow();
                             window.close();
                         }

@@ -20,12 +20,6 @@ module.exports = class Model extends BaseModel {
                 validation_bar: {
                     location: document.querySelector('#validation-bar-span')
                 },
-                login: {
-                    location: document.querySelector('#login')
-                },
-                password: {
-                    location: document.querySelector('#password')
-                },
                 searchFor: {
                     location: document.querySelector('#search-for')
                 },
@@ -34,25 +28,20 @@ module.exports = class Model extends BaseModel {
                 },
             },
         };
-
-        this.windowElements.spans.login.init = () => {
-            DS.get('spans','login').value = linkedinUserConfig.username;
-        };
-
-        this.windowElements.spans.password.init = () => {
-            DS.get('spans','password').value = linkedinUserConfig.password;
-        };
     
         this.windowElements.buttons.start.init = () => {
+            const login = linkedinUserConfig.username;
+            const password = linkedinUserConfig.password;
+
             DS.get('buttons','start').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 
-                if (DS.get('spans','login').value === '') {
+                if (login === '') {
                     DS.addError('Error: Login must not be empty');
                 }
 
-                if (!String(DS.get('spans','login').value)
+                if (!String(login)
                     .toLowerCase()
                     .match(
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -60,7 +49,7 @@ module.exports = class Model extends BaseModel {
                     DS.addError('Error: Login should have email format');
                 }
 
-                if (DS.get('spans','password').value === '') {
+                if (password === '') {
                     DS.addError('Error: Password must not be empty');
                 }
 
@@ -82,10 +71,10 @@ module.exports = class Model extends BaseModel {
                             await driver.get('https://www.linkedin.com');
                             driver.manage().window().maximize();
                             await driver.sleep(1000);
-                            let login = driver.findElement(By.id('session_key'));
-                            login.sendKeys(DS.get('spans','login').value);
-                            let password = driver.findElement(By.id('session_password'));
-                            password.sendKeys(DS.get('spans','password').value);
+                            let LinkedinLogin = driver.findElement(By.id('session_key'));
+                            LinkedinLogin.sendKeys(login);
+                            let LinkedinPassword = driver.findElement(By.id('session_password'));
+                            LinkedinPassword.sendKeys(password);
                             await driver.sleep(1000);
                             let loginButton = driver.findElement(By.css('button.sign-in-form__submit-button'));
                             loginButton.click();
