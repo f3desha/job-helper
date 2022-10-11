@@ -1,6 +1,8 @@
 {
+  "label": "Job Helper",
   "name": "job-helper",
   "version": "0.0.4",
+  "developmentYears": "2022",
   "description": "Simple app for helping you with your job",
   "main": "main.js",
   "scripts": {
