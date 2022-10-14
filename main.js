@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu} = require('electron');
-
+const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
 
@@ -163,7 +163,9 @@ function createMainWindow () {
   mainWindow.loadFile('./index.html');
   mainWindow.maximize();
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
+    mainWindow.show();
+    autoUpdater.checkForUpdates();
+
   });
 
   // Open the DevTools.
@@ -205,5 +207,31 @@ app.on('window-all-closed', function () {
 
 ipcMain.on('login-event', function(event1, args) {
     refreshMainMenu();
+});
+
+autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Ok'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: "A new version is being downloaded."
+  }
+  dialog.showMessageBox(dialogOpts, (response) => {
+
+  });
+});
+
+autoUpdater.on('update-downloaded', (_event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart','Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: "A new version has been downloaded. Restart the application to apply the updates."
+  };
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+  });
 });
 /*************LISTENERS END********* */
