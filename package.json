@@ -1,12 +1,13 @@
 {
   "label": "Job Helper",
   "name": "job-helper",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "developmentYears": "2022",
   "description": "Simple app for helping you with your job",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dist": "electron-builder",
     "sav": "electron-packager . job-helper --overwrite  --platform=win32 --arch=ia32 --icon=files/appicon.ico --prune=true --out=build --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Job Helper\""
   },
   "repository": "https://github.com/f3desha/job-helper",
@@ -16,7 +17,23 @@
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "chromedriver": "^106.0.1",
-    "electron": "^21.1.0",
     "selenium-webdriver": "^4.5.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^23.6.0",
+    "electron": "^21.1.0"
+  },
+  "build": {
+    "appId": "com.jobhelper.app",
+    "productName": "Job Helper",
+    "target": ["nsis"],
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    },
+    "directories":{
+      "buildResources":"resources",
+      "output":"release"
+    }
   }
 }
