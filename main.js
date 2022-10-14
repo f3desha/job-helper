@@ -121,7 +121,7 @@ function createSubwindow(config){
     }
   });
   remoteMain.enable(subWindow.webContents);
-  subWindow.setIcon(path.join(__dirname, '/resources/icon.png'));
+  subWindow.setIcon(path.join(__dirname, '/files/icon.png'));
   subWindow.removeMenu();
   subWindow.loadFile(`./renderers/${config.group}/${config.id}/View.html`);
   // subWindow.webContents.openDevTools();
@@ -159,7 +159,7 @@ function createMainWindow () {
   })
 
   // and load the index.html of the app.
-  mainWindow.setIcon(path.join(__dirname, '/resources/icon.png'));
+  mainWindow.setIcon(path.join(__dirname, '/files/icon.png'));
   mainWindow.loadFile('./index.html');
   mainWindow.maximize();
   mainWindow.once('ready-to-show', () => {

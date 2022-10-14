@@ -8,7 +8,7 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder",
-    "sav": "electron-packager . job-helper --overwrite  --platform=win32 --arch=ia32 --icon=files/appicon.ico --prune=true --out=build --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Job Helper\""
+    "sav": "electron-packager . job-helper --overwrite  --platform=win32 --arch=ia32 --icon=files/icon.ico --prune=true --out=build --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Job Helper\""
   },
   "repository": "https://github.com/f3desha/job-helper",
   "keywords": [],
@@ -26,7 +26,13 @@
   "build": {
     "appId": "com.jobhelper.app",
     "productName": "Job Helper",
-    "target": ["nsis"],
+    "asarUnpack": [
+      "configs/user_linkedin_config.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
     "nsis": {
       "allowToChangeInstallationDirectory": true,
       "oneClick": false
