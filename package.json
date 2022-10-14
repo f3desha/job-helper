@@ -7,7 +7,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "set GH_TOKEN=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 && electron-builder --publish always",
+    "dist": "electron-builder",
     "sav": "electron-packager . job-helper --overwrite  --platform=win32 --arch=ia32 --icon=files/icon.ico --prune=true --out=build --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Job Helper\""
   },
   "repository": "https://github.com/f3desha/job-helper",
