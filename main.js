@@ -3,27 +3,17 @@ const { app, BrowserWindow, Menu, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
-
 const ipcMain = require('electron').ipcMain;
-const path = require('path')
-const config = require('./config.json');
-const userHelperModule = require('./modules/user-helper/UserHelper');
 const fs = require("fs");
+const path = require('path');
+const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
 const isMac = process.platform === 'darwin'
 let mainMenu = null;
 
-config.appPath = app.getAppPath();
-fs.writeFileSync(
-    app.getAppPath() + path.sep + 'config.json',
-    JSON.stringify(config, null, "\t"), function (err) {
-      if (err) {
+appInit();
 
-      }
-      else {
-
-      }
-    });
+const config = require('./config.json');
 
 
 /********MENU TEMPLATE START *************** */
@@ -142,6 +132,24 @@ function createSubwindow(config){
     subWindow.show()
   });
   return subWindow;
+}
+
+function appInit() {
+  fs.copyFileSync(app.getAppPath() + path.sep + 'config.init.json', app.getAppPath() + path.sep + 'config.json');
+  fs.copyFileSync(app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.init.json', app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.json');
+
+  const config = require('./config.json');
+  config.appPath = app.getAppPath();
+  fs.writeFileSync(
+      app.getAppPath() + path.sep + 'config.json',
+      JSON.stringify(config, null, "\t"), function (err) {
+        if (err) {
+
+        }
+        else {
+
+        }
+      });
 }
 
 function createMainMenu(){
