@@ -15,7 +15,6 @@ appInit();
 
 const config = require('./config.json');
 
-
 /********MENU TEMPLATE START *************** */
 const template = [
   // { role: 'appMenu' }

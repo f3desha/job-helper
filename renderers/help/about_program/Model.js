@@ -34,6 +34,7 @@ module.exports = class Model extends BaseModel {
         }
 
         this.windowElements.spans.programVersion.init = () => {
+            document.title = `About Job Helper ${programConfig.version}`;
             DS.get('spans','programVersion').innerHTML = programConfig.version;
         }
 
