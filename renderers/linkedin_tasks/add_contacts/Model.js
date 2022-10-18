@@ -26,8 +26,16 @@ module.exports = class Model extends BaseModel {
                 contactMessage: {
                     location: document.querySelector('#contact-message')
                 },
+                startFromPage: {
+                    location: document.querySelector('#start-from-page')
+                },
             },
         };
+
+        this.windowElements.spans.startFromPage.init = () => {
+            const startSearchPageNum = linkedinUserConfig.startSearchPageNumber;
+            DS.get('spans','startFromPage').value = startSearchPageNum;
+        }
 
         this.windowElements.spans.searchFor.init = () => {
             const defaultSearchKeyword = linkedinUserConfig.addContactsDefaultSearchKeyword;
@@ -76,6 +84,7 @@ module.exports = class Model extends BaseModel {
                     DS.get('spans','validation_bar').innerHTML = 'Running...';
                     (async function start() {
 
+                        linkedinUserConfig.startSearchPageNumber = DS.get('spans','startFromPage').value;
                         linkedinUserConfig.addContactsDefaultSearchKeyword = DS.get('spans','searchFor').value;
                         linkedinUserConfig.addContactsDefaultMessage = DS.get('spans','contactMessage').value;
 
@@ -99,10 +108,9 @@ module.exports = class Model extends BaseModel {
                             loginButton.click();
 
                             await driver.sleep(15000);
-                            let pageCounter = 1;
 
-                            for (let i = 0; i < 100; i++) {
-                                driver.get('https://www.linkedin.com/search/results/people/?keywords='+DS.get('spans','searchFor').value+'&origin=SWITCH_SEARCH_VERTICAL&page='+pageCounter+'&sid='+userHelper.generateRandomString(3));
+                            while (true) {
+                                driver.get('https://www.linkedin.com/search/results/people/?keywords='+DS.get('spans','searchFor').value+'&origin=SWITCH_SEARCH_VERTICAL&page='+linkedinUserConfig.startSearchPageNumber+'&sid='+userHelper.generateRandomString(3));
                                 await driver.sleep(5000);
 
                                 let buttonsContainer = await driver.findElements(By.css(".ph0.pv2.artdeco-card.mb2 ul.reusable-search__entity-result-list.list-style-none li div.entity-result__actions.entity-result__divider div button[aria-label^='Пригласить участника']"));
@@ -131,7 +139,10 @@ module.exports = class Model extends BaseModel {
 
                                 }
                                 await driver.sleep(2000);
-                                pageCounter++;
+                                linkedinUserConfig.startSearchPageNumber++;
+                                DS.get('spans','startFromPage').value = linkedinUserConfig.startSearchPageNumber;
+                                Storage.set('linkedinTasks', '', linkedinUserConfig);
+
                             }
 
                         } finally {
