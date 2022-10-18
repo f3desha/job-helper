@@ -1,30 +1,28 @@
 {
-    "subwindows":
-    {
-        "linkedin_tasks": {
-            "add_credentials": {
-                "id": "add_credentials",
-                "group": "linkedin_tasks",
-                "width": 400,
-                "height": 210
-            },
-            "add_contacts": {
-                "id": "add_contacts",
-                "group": "linkedin_tasks",
-                "width": 400,
-                "height": 300
-            }
-        },
-        "help": {
-            "about_program": {
-                "id": "about_program",
-                "group": "help",
-                "width": 400,
-                "height": 280
-            }
-        },
-        "main": {
-
-        }
-    }
+	"appPath": "",
+	"subwindows": {
+		"linkedin_tasks": {
+			"add_credentials": {
+				"id": "add_credentials",
+				"group": "linkedin_tasks",
+				"width": 400,
+				"height": 210
+			},
+			"add_contacts": {
+				"id": "add_contacts",
+				"group": "linkedin_tasks",
+				"width": 400,
+				"height": 300
+			}
+		},
+		"help": {
+			"about_program": {
+				"id": "about_program",
+				"group": "help",
+				"width": 400,
+				"height": 280
+			}
+		},
+		"main": {}
+	}
 }

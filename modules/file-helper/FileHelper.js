@@ -1,14 +1,12 @@
 const path = require('path');
+const config = require('../../config.json');
 
 module.exports = class FileHelper {
-    application = null;
-
-    constructor(app) {
-        this.application = app;
+    constructor() {
     }
 
     getPath(p){
         let parts = p.split('/');
-        return this.application.getAppPath()+path.sep+parts.join(path.sep);
+        return config.appPath + path.sep+parts.join(path.sep);
     }
 }

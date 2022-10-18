@@ -1,14 +1,11 @@
-const fs = require('fs');
-const {app} = require("electron");
-const fileHelperModule = require('../../modules/file-helper/FileHelper');
-const fileHelper = new fileHelperModule(app);
+
 
 module.exports = class UserHelper {
 
     isLogined(){
-        let buffer = fs.readFileSync(fileHelper.getPath('configs/user_linkedin_config.json'));
-        const linkedinUserConfig = JSON.parse(buffer);
-
+        const StorageBase = require('../../modules/storage/StorageBase');
+        const Storage = new StorageBase();
+        const linkedinUserConfig = Storage.get('linkedinTasks');
         return linkedinUserConfig.login !== '' && linkedinUserConfig.password !== '';
     }
 

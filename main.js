@@ -8,9 +8,22 @@ const ipcMain = require('electron').ipcMain;
 const path = require('path')
 const config = require('./config.json');
 const userHelperModule = require('./modules/user-helper/UserHelper');
+const fs = require("fs");
 const userHelper = new userHelperModule();
 const isMac = process.platform === 'darwin'
 let mainMenu = null;
+
+config.appPath = app.getAppPath();
+fs.writeFileSync(
+    app.getAppPath() + path.sep + 'config.json',
+    JSON.stringify(config, null, "\t"), function (err) {
+      if (err) {
+
+      }
+      else {
+
+      }
+    });
 
 
 /********MENU TEMPLATE START *************** */
