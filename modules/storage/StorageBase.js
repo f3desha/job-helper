@@ -38,12 +38,10 @@ module.exports = class StorageBase {
             this.fileHelper.getPath('modules/storage/storage.json'),
             JSON.stringify(this.content, null, "\t"), function (err) {
                 if (err) {
-                    return false;
-                }
-                else {
-                    return this.content;
+                    throw new Error(err);
                 }
             });
+        return this.content;
     }
 
     getContent() {

@@ -65,12 +65,16 @@ module.exports = class Model extends BaseModel {
                 }
 
                 // Execution
-                DS.validate(async () => {
+                DS.validate(() => {
 
                     linkedinUserConfig.username = DS.get('spans','login').value;
                     linkedinUserConfig.password = DS.get('spans','password').value;
 
-                    await Storage.set('linkedinTasks', '', linkedinUserConfig);
+                    try {
+                        const response = Storage.set('linkedinTasks', '', linkedinUserConfig);
+                    } catch (e) {
+                        console.error(e);
+                    }
 
                     ipcRenderer.send('login-event', []);
                     let window = require('@electron/remote').getCurrentWindow();
