@@ -135,8 +135,12 @@ function createSubwindow(config){
 }
 
 function appInit() {
-  fs.copyFileSync(app.getAppPath() + path.sep + 'config.init.json', app.getAppPath() + path.sep + 'config.json');
-  fs.copyFileSync(app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.init.json', app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.json');
+  if (!fs.existsSync(app.getAppPath() + path.sep + 'config.json')) {
+    fs.copyFileSync(app.getAppPath() + path.sep + 'config.init.json', app.getAppPath() + path.sep + 'config.json');
+  }
+  if (!fs.existsSync(app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.json')) {
+    fs.copyFileSync(app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.init.json', app.getAppPath() + path.sep + 'modules'+ path.sep +'storage'+ path.sep +'storage.json');
+  }
 
   const config = require('./config.json');
   config.appPath = app.getAppPath();
