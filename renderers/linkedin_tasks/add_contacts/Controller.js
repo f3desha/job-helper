@@ -1,4 +1,4 @@
-var {remote} = require('electron');
+var {remote, ipcRenderer} = require('electron');
 const fs = require("fs");
 var chromedriver = require('chromedriver');
 var webdriver = require('selenium-webdriver');

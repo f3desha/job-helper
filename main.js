@@ -5,6 +5,8 @@ const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
 const ipcMain = require('electron').ipcMain;
 const fs = require("fs");
+const linkedinApiBuilderModule = require("./modules/api-builder/LinkedinApiBuilder");
+const linkedinApiBuilder = new linkedinApiBuilderModule();
 const path = require('path');
 const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
@@ -84,14 +86,14 @@ const template = [
       },
     ]
   },
-  // {
-  //   label: 'View',
-  //   submenu: [
-  //     { role: 'reload' },
-  //     { role: 'forceReload' },
-  //     { role: 'toggleDevTools' },
-  //   ]
-  // }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+    ]
+  }
 ]
 mainMenu = Menu.buildFromTemplate(template);
 /*******MENU TEMPLATE ENDS*****************/
@@ -110,6 +112,10 @@ function getAboutProgram(){
   createSubwindow(config.subwindows.help.about_program);
 }
 
+function createLinkedinapiDemon(){
+  linkedinApiBuilder.init();
+}
+
 function createSubwindow(config){
    const subWindow = new BrowserWindow({
     resizable: false,
@@ -126,7 +132,7 @@ function createSubwindow(config){
   subWindow.setIcon(path.join(__dirname, '/files/icon.png'));
   subWindow.removeMenu();
   subWindow.loadFile(`./renderers/${config.group}/${config.id}/View.html`);
-  // subWindow.webContents.openDevTools();
+  subWindow.webContents.openDevTools();
   subWindow.once('ready-to-show', () => {
     subWindow.show()
   });
@@ -231,6 +237,18 @@ app.on('window-all-closed', function () {
 
 ipcMain.on('login-event', function(event1, args) {
     refreshMainMenu();
+});
+
+ipcMain.handle('create-linkedinapi-demon', async (event1, args) => {
+  return await linkedinApiBuilder.init();
+});
+
+ipcMain.handle('linkedinapi-login', async (event1, args) => {
+  return await linkedinApiBuilder.login(args.login, args.password);
+});
+
+ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
+  return await linkedinApiBuilder.mfaCheck(mfaCode);
 });
 
 autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
