@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { app, BrowserWindow, Menu, dialog, net } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
@@ -257,19 +257,61 @@ ipcMain.handle('create-linkedinapi-demon', async (event1, args) => {
 });
 
 ipcMain.handle('linkedinapi-login', async (event1, args) => {
-  return await linkedinApiBuilder.login(args.login, args.password);
+  return await new Promise(function(resolve, reject) {
+    var body = JSON.stringify({ username: args.login, password: args.password });
+    const request = net.request({
+      method: 'POST',
+      url: 'http://localhost:2402/linkedin-api-v1/account/login',
+      redirect: 'follow'
+    });
+    request.on('response', (response) => {
+
+      response.on('data', (chunk) => {
+        chunk = JSON.parse(chunk);
+        return resolve(chunk.status);
+      })
+
+      response.on('end', () => {
+
+      })
+    })
+    request.setHeader('Content-Type', 'application/json');
+    request.write(body, 'utf-8');
+    request.end();
+  });
 });
 
 ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
-  return await linkedinApiBuilder.mfaCheck(mfaCode);
+  return await new Promise(function(resolve, reject) {
+    var body = JSON.stringify({ mfaCode: mfaCode });
+    const request = net.request({
+      method: 'POST',
+      url: 'http://localhost:2402/linkedin-api-v1/account/mfa-check',
+      redirect: 'follow'
+    });
+    request.on('response', (response) => {
+
+      response.on('data', (chunk) => {
+        chunk = JSON.parse(chunk);
+        return resolve(chunk.status);
+      })
+
+      response.on('end', () => {
+
+      })
+    })
+    request.setHeader('Content-Type', 'application/json');
+    request.write(body, 'utf-8');
+    request.end();
+  });
 });
 
 ipcMain.handle('check-linkedinapi-status', (event1, args) => {
-  return linkedinApiBuilder.isOnline();
+  return linkedinApiWrapper.isOnline();
 });
 
 ipcMain.handle('linkedinapi-stop', (event1, args) => {
-  return linkedinApiBuilder.logout();
+  return linkedinApiWrapper.stop();
 });
 
 autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
