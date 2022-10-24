@@ -226,7 +226,7 @@ app.whenReady().then(() => {
               linkedinApiWrapper.stop();
             }
       });
-  }, 5000);
+  }, 30000);
   // app.on('activate', function () {
   //   // On macOS it's common to re-create a window in the app when the
   //   // dock icon is clicked and there are no other windows open.
@@ -257,43 +257,23 @@ ipcMain.handle('create-linkedinapi-demon', async (event1, args) => {
 });
 
 ipcMain.handle('linkedinapi-login', async (event1, args) => {
-  return await new Promise(function(resolve, reject) {
-    var body = JSON.stringify({ username: args.login, password: args.password });
-    const request = net.request({
-      method: 'POST',
-      url: 'http://localhost:2402/linkedin-api-v1/account/login',
-      redirect: 'follow'
-    });
-    request.on('response', (response) => {
-
-      response.on('data', (chunk) => {
-        chunk = JSON.parse(chunk);
-        return resolve(chunk.status);
-      })
-
-      response.on('end', () => {
-
-      })
-    })
-    request.setHeader('Content-Type', 'application/json');
-    request.write(body, 'utf-8');
-    request.end();
-  });
+  let response = await postRequest('http://localhost:2402/linkedin-api-v1/account/login', { username: args.login, password: args.password });
+  let res = JSON.parse(response);
+  return res.status;
 });
 
-ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
+async function postRequest(url, body = {}){
   return await new Promise(function(resolve, reject) {
-    var body = JSON.stringify({ mfaCode: mfaCode });
+    body = JSON.stringify(body);
     const request = net.request({
       method: 'POST',
-      url: 'http://localhost:2402/linkedin-api-v1/account/mfa-check',
+      url: url,
       redirect: 'follow'
     });
     request.on('response', (response) => {
 
       response.on('data', (chunk) => {
-        chunk = JSON.parse(chunk);
-        return resolve(chunk.status);
+        return resolve(chunk);
       })
 
       response.on('end', () => {
@@ -304,6 +284,12 @@ ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
     request.write(body, 'utf-8');
     request.end();
   });
+}
+
+ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
+    let response = await postRequest('http://localhost:2402/linkedin-api-v1/account/mfa-check', {'mfaCode': mfaCode});
+    let res = JSON.parse(response);
+    return res.status;
 });
 
 ipcMain.handle('check-linkedinapi-status', (event1, args) => {
