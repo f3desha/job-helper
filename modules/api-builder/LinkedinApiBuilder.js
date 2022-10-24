@@ -13,20 +13,25 @@ module.exports = class LinkedinApiBuilder {
     }
 
     async checkDriverHealth() {
-        if (this.driver) {
             return new Promise((resolve, reject) => {
-                this.driver.getWindowHandle()
+                if (this.driver) {
+                    this.driver.getWindowHandle()
                     .then(async (response) => {
                         resolve('driverLive');
                     }) .catch((err) => {
                     reject('driverDead');
                 });
-            })
-        }
+            } else {
+                    reject('driverNotInitialized');
+                }
+        })
+
     }
 
     async init(){
         try {
+
+
         this.driver = new webdriver.Builder()
             .forBrowser('chrome')
             // .setChromeOptions(

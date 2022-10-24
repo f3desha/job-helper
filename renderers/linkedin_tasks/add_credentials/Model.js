@@ -152,25 +152,25 @@ module.exports = class Model extends BaseModel {
 
                     ipcRenderer.invoke('create-linkedinapi-demon', [])
                     .then((result) => {
-                        DS.get('spans','validation_bar').innerHTML = 'Try to login...';
-                        ipcRenderer.invoke('linkedinapi-login', {
-                            login: linkedinUserConfig.username,
-                            password: linkedinUserConfig.password,
-                        })
-                            .then((loginResult) => {
-                                switch (loginResult) {
-                                    case 'loginSuccessfull':
-                                        onLoginSuccess();
-                                    break;
-                                    case 'loginFailed':
-                                        DS.get('spans','validation_bar').innerHTML = 'Login failed';
-                                        break;
-                                    case 'waitForMfa':
-                                        DS.get('spans','validation_bar').innerHTML = 'Please enter MFA code';
-                                        DS.get('spans','mfa_block').classList.remove("invisible");
-                                    break;
-                                }
-                            })
+                        // DS.get('spans','validation_bar').innerHTML = 'Try to login...';
+                        // ipcRenderer.invoke('linkedinapi-login', {
+                        //     login: linkedinUserConfig.username,
+                        //     password: linkedinUserConfig.password,
+                        // })
+                        //     .then((loginResult) => {
+                        //         switch (loginResult) {
+                        //             case 'loginSuccessfull':
+                        //                 onLoginSuccess();
+                        //             break;
+                        //             case 'loginFailed':
+                        //                 DS.get('spans','validation_bar').innerHTML = 'Login failed';
+                        //                 break;
+                        //             case 'waitForMfa':
+                        //                 DS.get('spans','validation_bar').innerHTML = 'Please enter MFA code';
+                        //                 DS.get('spans','mfa_block').classList.remove("invisible");
+                        //             break;
+                        //         }
+                        //     })
                     })
                     try {
                         const response = Storage.set('linkedinTasks', '', linkedinUserConfig);

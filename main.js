@@ -7,6 +7,8 @@ const ipcMain = require('electron').ipcMain;
 const fs = require("fs");
 const linkedinApiBuilderModule = require("./modules/api-builder/LinkedinApiBuilder");
 const linkedinApiBuilder = new linkedinApiBuilderModule();
+const linkedinApiWrapperModule = require("./modules/api-wrapper/LinkedinApiWrapper");
+const linkedinApiWrapper = new linkedinApiWrapperModule();
 const path = require('path');
 const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
@@ -113,7 +115,7 @@ function getAboutProgram(){
 }
 
 function createLinkedinapiDemon(){
-  linkedinApiBuilder.init();
+  linkedinApiWrapper.start();
 }
 
 function createSubwindow(config){
@@ -199,7 +201,7 @@ function createMainWindow () {
   });
 
   mainWindow.on('close', async () => {
-    await linkedinApiBuilder.logout();
+    await linkedinApiWrapper.stop();
   })
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -216,13 +218,15 @@ app.whenReady().then(() => {
   createMainWindow()
 
   setInterval(() => {
-      linkedinApiBuilder.checkDriverHealth()
+      linkedinApiWrapper.checkDriverHealth()
           .then(async (response) => {
 
           }) .catch((err) => {
-          linkedinApiBuilder.logout();
+            if (err === 'driverDead') {
+              linkedinApiWrapper.stop();
+            }
       });
-  }, 30000);
+  }, 5000);
   // app.on('activate', function () {
   //   // On macOS it's common to re-create a window in the app when the
   //   // dock icon is clicked and there are no other windows open.
@@ -230,8 +234,6 @@ app.whenReady().then(() => {
   // })
 
 })
-
-
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
@@ -251,7 +253,7 @@ ipcMain.on('login-event', function(event1, args) {
 });
 
 ipcMain.handle('create-linkedinapi-demon', async (event1, args) => {
-  return await linkedinApiBuilder.init();
+  return await linkedinApiWrapper.start();
 });
 
 ipcMain.handle('linkedinapi-login', async (event1, args) => {
