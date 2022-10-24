@@ -95,12 +95,12 @@ module.exports = class Model extends BaseModel {
 
         async function updateStatus() {
             if (await isLoggedIn()){
-                DS.get('spans','login_status').classList.remove("red");
+                DS.get('spans','login_status').classList.remove("grey");
                 DS.get('spans','login_status').classList.add("green");
                 DS.get('spans','login_status').innerHTML = "&#9679; Logged in";
             } else {
                 DS.get('spans','login_status').classList.remove("green");
-                DS.get('spans','login_status').classList.add("red");
+                DS.get('spans','login_status').classList.add("grey");
                 DS.get('spans','login_status').innerHTML = "&#9679; Logged out";
             }
         }
@@ -135,11 +135,11 @@ module.exports = class Model extends BaseModel {
                     }
                 }
 
-                if ((DS.get('spans','login').value === '' && DS.get('spans','password').value !== '')) {
+                if ((DS.get('spans','login').value === '')) {
                     DS.addError('Error: Login shouldn\'t be empty');
                 }
 
-                if ((DS.get('spans','password').value === '' && DS.get('spans','login').value !== '')) {
+                if ((DS.get('spans','password').value === '')) {
                     DS.addError('Error: Password shouldn\'t be empty');
                 }
 
@@ -161,7 +161,7 @@ module.exports = class Model extends BaseModel {
                                 switch (loginResult) {
                                     case 'loginSuccessfull':
                                         onLoginSuccess();
-                                    break;
+                                        break;
                                     case 'loginFailed':
                                         DS.get('spans','validation_bar').innerHTML = 'Login failed';
                                         break;
@@ -170,17 +170,11 @@ module.exports = class Model extends BaseModel {
                                         DS.get('spans','mfa_block').classList.remove("invisible");
                                     break;
                                 }
+                                const response = Storage.set('linkedinTasks', '', linkedinUserConfig);
+                                ipcRenderer.send('login-event', []);
+
                             })
                     })
-                    try {
-                        const response = Storage.set('linkedinTasks', '', linkedinUserConfig);
-                    } catch (e) {
-                        console.error(e);
-                    }
-
-                    // ipcRenderer.send('login-event', []);
-                    // let window = require('@electron/remote').getCurrentWindow();
-                    // window.close();
 
                 });
 

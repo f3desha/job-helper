@@ -6,7 +6,7 @@
 				"id": "add_credentials",
 				"group": "linkedin_tasks",
 				"width": 400,
-				"height": 210
+				"height": 280
 			},
 			"add_contacts": {
 				"id": "add_contacts",

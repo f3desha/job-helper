@@ -134,7 +134,7 @@ function createSubwindow(config){
   subWindow.setIcon(path.join(__dirname, '/files/icon.png'));
   subWindow.removeMenu();
   subWindow.loadFile(`./renderers/${config.group}/${config.id}/View.html`);
-  subWindow.webContents.openDevTools();
+  // subWindow.webContents.openDevTools();
   subWindow.once('ready-to-show', () => {
     subWindow.show()
   });
