@@ -11,7 +11,7 @@ const requestHelperModule = require("./modules/request-helper/RequestHelper");
 const requestHelper = new requestHelperModule();
 const path = require('path');
 const userHelperModule = require('./modules/user-helper/UserHelper');
-const userHelper = new userHelperModule();
+const userHelper = new userHelperModule(linkedinApiWrapper);
 const isMac = process.platform === 'darwin'
 let mainMenu = null;
 
@@ -224,6 +224,7 @@ app.whenReady().then(() => {
           }) .catch((err) => {
             if (err === 'driverDead') {
               linkedinApiWrapper.stop();
+              refreshMainMenu();
             }
       });
   }, 30000);

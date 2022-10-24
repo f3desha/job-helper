@@ -2,11 +2,14 @@
 
 module.exports = class UserHelper {
 
+    linkedinApiWrapper = null;
+
+    constructor(linkedinApiWrapper) {
+        this.linkedinApiWrapper = linkedinApiWrapper;
+    }
+
     isLogined(){
-        const StorageBase = require('../../modules/storage/StorageBase');
-        const Storage = new StorageBase();
-        const linkedinUserConfig = Storage.get('linkedinTasks');
-        return linkedinUserConfig.login !== '' && linkedinUserConfig.password !== '';
+        return this.linkedinApiWrapper.isOnline();
     }
 
     generateRandomString(length) {

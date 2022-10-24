@@ -77,6 +77,7 @@ module.exports = class Model extends BaseModel {
         }
 
         async function isLoggedIn() {
+            ipcRenderer.send('login-event', []);
             return await ipcRenderer.invoke('check-linkedinapi-status', '')
         }
 
@@ -171,7 +172,6 @@ module.exports = class Model extends BaseModel {
                                     break;
                                 }
                                 const response = Storage.set('linkedinTasks', '', linkedinUserConfig);
-                                ipcRenderer.send('login-event', []);
 
                             })
                     })
