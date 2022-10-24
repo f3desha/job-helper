@@ -5,10 +5,10 @@ const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
 const ipcMain = require('electron').ipcMain;
 const fs = require("fs");
-const linkedinApiBuilderModule = require("./modules/api-builder/LinkedinApiBuilder");
-const linkedinApiBuilder = new linkedinApiBuilderModule();
 const linkedinApiWrapperModule = require("./modules/api-wrapper/LinkedinApiWrapper");
 const linkedinApiWrapper = new linkedinApiWrapperModule();
+const requestHelperModule = require("./modules/request-helper/RequestHelper");
+const requestHelper = new requestHelperModule();
 const path = require('path');
 const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
@@ -257,37 +257,13 @@ ipcMain.handle('create-linkedinapi-demon', async (event1, args) => {
 });
 
 ipcMain.handle('linkedinapi-login', async (event1, args) => {
-  let response = await postRequest('http://localhost:2402/linkedin-api-v1/account/login', { username: args.login, password: args.password });
+  let response = await requestHelper.postRequest('http://localhost:2402/linkedin-api-v1/account/login', { username: args.login, password: args.password });
   let res = JSON.parse(response);
   return res.status;
 });
 
-async function postRequest(url, body = {}){
-  return await new Promise(function(resolve, reject) {
-    body = JSON.stringify(body);
-    const request = net.request({
-      method: 'POST',
-      url: url,
-      redirect: 'follow'
-    });
-    request.on('response', (response) => {
-
-      response.on('data', (chunk) => {
-        return resolve(chunk);
-      })
-
-      response.on('end', () => {
-
-      })
-    })
-    request.setHeader('Content-Type', 'application/json');
-    request.write(body, 'utf-8');
-    request.end();
-  });
-}
-
 ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
-    let response = await postRequest('http://localhost:2402/linkedin-api-v1/account/mfa-check', {'mfaCode': mfaCode});
+    let response = await requestHelper.postRequest('http://localhost:2402/linkedin-api-v1/account/mfa-check', {'mfaCode': mfaCode});
     let res = JSON.parse(response);
     return res.status;
 });

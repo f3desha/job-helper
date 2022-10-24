@@ -21,12 +21,10 @@ module.exports = class LinkedinApiWrapper {
         })
 
         app.post('/linkedin-api-v1/account/login', async (req, res) => {
+            const username = req.body.username;
+            const password = req.body.password;
 
-                const username = req.body.username;
-                const password = req.body.password;
-
-                const result = await linkedinApiBuilder.login(username, password);
-
+            const result = await linkedinApiBuilder.login(username, password);
 
             res.json({
                 'status': result
@@ -34,9 +32,8 @@ module.exports = class LinkedinApiWrapper {
         })
 
         app.post('/linkedin-api-v1/account/mfa-check', async (req, res) => {
-
-                const mfaCode = req.body.mfaCode;
-                const result = await linkedinApiBuilder.mfaCheck(mfaCode);
+            const mfaCode = req.body.mfaCode;
+            const result = await linkedinApiBuilder.mfaCheck(mfaCode);
 
             res.json({
                 'status': result
