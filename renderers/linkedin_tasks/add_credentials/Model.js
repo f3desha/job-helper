@@ -9,11 +9,11 @@ module.exports = class Model extends BaseModel {
         //Defining elements location
         this.windowElements = {
             buttons: {
-                save:    {
-                    location: document.getElementById("save")
+                login:    {
+                    location: document.getElementById("login-button")
                 },
-                clear:    {
-                    location: document.getElementById("clear")
+                logout:    {
+                    location: document.getElementById("logout-button")
                 },
                 close:  {
                     location: document.getElementById("close")
@@ -23,14 +23,32 @@ module.exports = class Model extends BaseModel {
                 },
             },
             spans: {
+                login_button: {
+                    location: document.querySelector('#login-button')
+                },
+                logout_button: {
+                    location: document.querySelector('#logout-button')
+                },
                 validation_bar: {
                     location: document.querySelector('#validation-bar-span')
+                },
+                login_inputs: {
+                    location: document.querySelector('#login-inputs')
                 },
                 login: {
                     location: document.querySelector('#login')
                 },
+                login_status: {
+                    location: document.querySelector('#login-status')
+                },
+                login_block: {
+                    location: document.querySelector('#login-block')
+                },
                 password: {
                     location: document.querySelector('#password')
+                },
+                password_block: {
+                    location: document.querySelector('#password-block')
                 },
                 mfa_block: {
                     location: document.querySelector('#mfa-code-block')
@@ -41,6 +59,10 @@ module.exports = class Model extends BaseModel {
             },
         };
 
+        this.windowElements.spans.login_inputs.init = () => {
+            updateLoginStatus();
+        };
+
         this.windowElements.spans.login.init = () => {
             DS.get('spans','login').value = linkedinUserConfig.username;
         };
@@ -49,6 +71,40 @@ module.exports = class Model extends BaseModel {
             DS.get('spans','password').value = linkedinUserConfig.password;
         };
 
+        function onLoginSuccess() {
+            DS.get('spans','validation_bar').innerHTML = 'Successfully logged in';
+            updateLoginStatus();
+        }
+
+        async function isLoggedIn() {
+            return await ipcRenderer.invoke('check-linkedinapi-status', '')
+        }
+
+        async function updateLoginStatus(){
+            if (await isLoggedIn()) {
+                DS.get('spans','login_button').classList.add('hidden');
+                DS.get('spans','logout_button').classList.remove('hidden');
+                DS.get('spans','login_inputs').classList.add("hidden");
+            } else {
+                DS.get('spans','logout_button').classList.add('hidden');
+                DS.get('spans','login_button').classList.remove('hidden');
+                DS.get('spans','login_inputs').classList.remove("hidden");
+            }
+            updateStatus();
+        }
+
+        async function updateStatus() {
+            if (await isLoggedIn()){
+                DS.get('spans','login_status').classList.remove("red");
+                DS.get('spans','login_status').classList.add("green");
+                DS.get('spans','login_status').innerHTML = "&#9679; Logged in";
+            } else {
+                DS.get('spans','login_status').classList.remove("green");
+                DS.get('spans','login_status').classList.add("red");
+                DS.get('spans','login_status').innerHTML = "&#9679; Logged out";
+            }
+        }
+
         this.windowElements.buttons.mfa_send.init = () => {
             DS.get('buttons','mfa_send').addEventListener("click", function (e) {
                 DS.get('spans','validation_bar').innerHTML = 'Sending MFA code...';
@@ -56,16 +112,16 @@ module.exports = class Model extends BaseModel {
                     .then((result) => {
                         switch (result) {
                             case 'loginSuccessfull':
-                                DS.get('spans','validation_bar').innerHTML = 'Successfully logged in';
+                                onLoginSuccess();
                                 break;
                         }
                     })
             });
         }
 
-        this.windowElements.buttons.save.init = () => {
+        this.windowElements.buttons.login.init = () => {
 
-            DS.get('buttons','save').addEventListener("click", function (e) {
+            DS.get('buttons','login').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 
@@ -92,6 +148,7 @@ module.exports = class Model extends BaseModel {
 
                     linkedinUserConfig.username = DS.get('spans','login').value;
                     linkedinUserConfig.password = DS.get('spans','password').value;
+                    DS.get('spans','validation_bar').innerHTML = 'Starting linkedin api...';
 
                     ipcRenderer.invoke('create-linkedinapi-demon', [])
                     .then((result) => {
@@ -103,7 +160,7 @@ module.exports = class Model extends BaseModel {
                             .then((loginResult) => {
                                 switch (loginResult) {
                                     case 'loginSuccessfull':
-                                        DS.get('spans','validation_bar').innerHTML = 'Successfully logged in';
+                                        onLoginSuccess();
                                     break;
                                     case 'loginFailed':
                                         DS.get('spans','validation_bar').innerHTML = 'Login failed';
@@ -130,21 +187,20 @@ module.exports = class Model extends BaseModel {
             });
         }
 
-        this.windowElements.buttons.clear.init = () => {
-
-            DS.get('buttons','clear').addEventListener("click", function (e) {
-                DS.get('spans','login').value = '';
-                DS.get('spans','password').value = '';
-                DS.get('spans','validation_bar').innerHTML = 'Cleared';
-            });
-        }
-
         this.windowElements.buttons.close.init = () => {
 
             DS.get('buttons','close').addEventListener("click", function (e) {
                 let window = require('@electron/remote').getCurrentWindow();
                 window.close();
             }); 
+        }
+
+        this.windowElements.buttons.logout.init = () => {
+
+            DS.get('buttons','logout').addEventListener("click", async function (e) {
+                await ipcRenderer.invoke('linkedinapi-stop', '');
+                updateLoginStatus();
+            });
         }
 
         //Mandatory section for running Model initialization

@@ -1,13 +1,37 @@
 var webdriver = require('selenium-webdriver');
 const {By,until} = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
 
 module.exports = class LinkedinApiBuilder {
     driver = null;
+
+    isOnline() {
+        if (this.driver) {
+            return true;
+        }
+        return false;
+    }
+
+    async checkDriverHealth() {
+        if (this.driver) {
+            return new Promise((resolve, reject) => {
+                this.driver.getWindowHandle()
+                    .then(async (response) => {
+                        resolve('driverLive');
+                    }) .catch((err) => {
+                    reject('driverDead');
+                });
+            })
+        }
+    }
 
     async init(){
         try {
         this.driver = new webdriver.Builder()
             .forBrowser('chrome')
+            // .setChromeOptions(
+            //     new chrome.Options().headless()
+            // )
             .build();
 
 
@@ -50,6 +74,14 @@ module.exports = class LinkedinApiBuilder {
                     });
 
         })
+    }
+
+    async logout() {
+        if (this.driver) {
+            this.driver.quit();
+        }
+        this.driver = null;
+        return true;
     }
 
     async mfaCheck (mfaCode){

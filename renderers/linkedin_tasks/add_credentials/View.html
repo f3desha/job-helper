@@ -13,25 +13,32 @@
     <div class="summary">
         <div class="box disable-select">
             <div class="box-content">
-              <div class="input-block" >
-                Login <input id="login" type="text">
-              </div>
-              <div class="input-block">
-                Password <input id="password" type="password">
-              </div>
-              <div class="input-block invisible" id="mfa-code-block">
-                MFA Code <div class="short-button" id="mfa-send">
-                  Send MFA
-              </div>&nbsp;<input maxlength="6" id="mfa-code" class="short-input" type="text">
+                <div class="input-block" id="status-block">
+                    <div class="left-subblock">Status:</div>
+                    <div id="login-status" class="right-subblock"></div>
+                </div>
+                <div id="login-inputs">
+                    <div class="input-block" id="login-block">
+                        Login <input id="login" type="text">
+                    </div>
+                    <div class="input-block" id="password-block">
+                        Password <input id="password" type="password">
+                    </div>
+                    <div class="input-block invisible" id="mfa-code-block">
+                        MFA Code <div class="short-button" id="mfa-send">
+                        Send MFA
+                    </div>&nbsp;<input maxlength="6" id="mfa-code" class="short-input" type="text">
+                </div>
+
               </div>
             
             </div>
             <div class="box-footer">
-              <div class="button" id="save">
-                Save
+              <div class="button" id="login-button">
+                Login
               </div>
-                <div class="button" id="clear">
-                    Clear
+                <div class="button" id="logout-button">
+                    Logout
                 </div>
               <div class="button" id="close">
                 Close

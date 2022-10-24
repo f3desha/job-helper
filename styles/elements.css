@@ -60,18 +60,26 @@
   .input-block{
       padding: 10px 0px;
   }
+  .input-block .left-subblock{
+      display: inline-block;
+    width: 160px;
+  }
+  .input-block .right-subblock {
+    display: inline-block;
+  }
   .input-block input {
       float: right;
   }
-.input-block input.short-input {
+  .input-block input.short-input {
     width: 75px;
     margin-right: 5px;
-}
-
-.invisible {
-    display: none;
-}
-
+  }
+  .invisible {
+    visibility: hidden;
+  }
+  .hidden {
+    display: none!important;
+  }
   .input-block textarea {
       margin-top: 10px;
       resize: none;
@@ -159,6 +167,12 @@
 .validation-bar span {
    position: relative;
    left: 10px;
+}
+.green {
+    color: rgb(2, 133, 0);
+}
+.red {
+    color: rgb(225, 0, 0);
 }
 .validation-bar .error {
     color: rgb(225, 0, 0);

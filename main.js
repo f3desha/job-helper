@@ -198,6 +198,9 @@ function createMainWindow () {
 
   });
 
+  mainWindow.on('close', async () => {
+    await linkedinApiBuilder.logout();
+  })
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
@@ -212,6 +215,14 @@ app.whenReady().then(() => {
   refreshMainMenu()
   createMainWindow()
 
+  setInterval(() => {
+      linkedinApiBuilder.checkDriverHealth()
+          .then(async (response) => {
+
+          }) .catch((err) => {
+          linkedinApiBuilder.logout();
+      });
+  }, 30000);
   // app.on('activate', function () {
   //   // On macOS it's common to re-create a window in the app when the
   //   // dock icon is clicked and there are no other windows open.
@@ -231,7 +242,7 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', async () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
@@ -249,6 +260,14 @@ ipcMain.handle('linkedinapi-login', async (event1, args) => {
 
 ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
   return await linkedinApiBuilder.mfaCheck(mfaCode);
+});
+
+ipcMain.handle('check-linkedinapi-status', (event1, args) => {
+  return linkedinApiBuilder.isOnline();
+});
+
+ipcMain.handle('linkedinapi-stop', (event1, args) => {
+  return linkedinApiBuilder.logout();
 });
 
 autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
