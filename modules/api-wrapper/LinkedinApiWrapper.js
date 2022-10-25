@@ -40,6 +40,30 @@ module.exports = class LinkedinApiWrapper {
             })
         })
 
+        app.get('/linkedin-api-v1/account/get-people-from-search/invitable/:searchKeyword/:page', async (req, res) => {
+            const result = await linkedinApiBuilder.getInvitablePeopleFromSearch(req.params.searchKeyword, req.params.page);
+
+            res.json({
+                'response': result
+            })
+        })
+
+        app.get('/linkedin-api-v1/account/mynetwork/contacts-get-links', async (req, res) => {
+            const result = await linkedinApiBuilder.getAllContacts();
+
+            res.json({
+                'response': `imported ${result} links`
+            })
+        })
+
+        app.get('/linkedin-api-v1/account/mynetwork/contacts-get-profiles', async (req, res) => {
+            const result = await linkedinApiBuilder.getProfileByLink();
+
+            res.json({
+                'response': result
+            })
+        })
+
         this.server = app.listen(port, () => {
             console.log(`Example app listening on port ${port}`)
         })
