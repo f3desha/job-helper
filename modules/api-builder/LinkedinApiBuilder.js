@@ -5,6 +5,7 @@ const userHelperModule = require('../user-helper/UserHelper');
 const userHelper = new userHelperModule();
 const StorageBase = require('../storage/StorageBase');
 const Storage = new StorageBase();
+const linkedinUserConfig = Storage.get('linkedinTasks');
 
 module.exports = class LinkedinApiBuilder {
     driver = null;
@@ -112,6 +113,16 @@ module.exports = class LinkedinApiBuilder {
         })
     }
 
+    async getMyLinkedinUrnId()
+    {
+        const meta = await this.driver.findElement(By.css('meta[name="__init"]'));
+        let data = await meta.getAttribute('content');
+        const regex = /urn:li:member:[0-9]+/g;
+        const found = data.match(regex);
+        const trimmed = found[0].split('urn:li:member:');
+        return trimmed[1];
+    }
+
     async scrollToBottom() {
         return new Promise((resolve, reject) => {
             let scrollToBottom = setInterval(() => {
@@ -162,19 +173,25 @@ module.exports = class LinkedinApiBuilder {
 
         await this.scrollToBottom();
         console.log('Content loaded');
-        let contactsList = Storage.get('contactsListProfileLinks');
+        let contactsList = {};
         let allContacts = await this.driver.findElements(By.css('li.mn-connection-card.artdeco-list'));
         let key = null;
         let i = null;
+        let person = {};
         for (i = 0; i < allContacts.length; i++) {
 
             let mainBlock = await allContacts[i].findElement(By.css("a.ember-view.mn-connection-card__picture"));
             key = await mainBlock.getAttribute("href");
-            contactsList[key] = i;
+            let imageBlock = await allContacts[i].findElement(By.css("img.presence-entity__image.EntityPhoto-circle-5.lazy-image.ember-view"));
+            person = {};
+            person.name = await imageBlock.getAttribute("alt");
+            person.image = await imageBlock.getAttribute("src");
+            contactsList[key] = person;
             console.log(`[${i}] Setting ${key}`);
 
         }
-        Storage.set('contactsListProfileLinks', '', contactsList);
+        linkedinUserConfig['incontactsPeople'] = contactsList;
+        Storage.set('linkedinTasks', '', linkedinUserConfig);
         return i;
     }
 

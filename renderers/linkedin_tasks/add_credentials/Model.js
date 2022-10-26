@@ -71,9 +71,14 @@ module.exports = class Model extends BaseModel {
             DS.get('spans','password').value = linkedinUserConfig.password;
         };
 
-        function onLoginSuccess() {
+        async function onLoginSuccess() {
             DS.get('spans','validation_bar').innerHTML = 'Successfully logged in';
+            let response = await ipcRenderer.invoke('get-linkedin-urn-id', '');
+            let userUrnId = response;
+            linkedinUserConfig.userUrnId = userUrnId;
+
             updateLoginStatus();
+            return true;
         }
 
         async function isLoggedIn() {
@@ -158,10 +163,10 @@ module.exports = class Model extends BaseModel {
                             login: linkedinUserConfig.username,
                             password: linkedinUserConfig.password,
                         })
-                            .then((loginResult) => {
+                            .then(async (loginResult) => {
                                 switch (loginResult) {
                                     case 'loginSuccessfull':
-                                        onLoginSuccess();
+                                        await onLoginSuccess();
                                         break;
                                     case 'loginFailed':
                                         DS.get('spans','validation_bar').innerHTML = 'Login failed';

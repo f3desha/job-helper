@@ -8,6 +8,12 @@
 				"width": 400,
 				"height": 280
 			},
+			"my_contacts": {
+				"id": "my_contacts",
+				"group": "linkedin_tasks",
+				"width": 400,
+				"height": 280
+			},
 			"add_contacts": {
 				"id": "add_contacts",
 				"group": "linkedin_tasks",

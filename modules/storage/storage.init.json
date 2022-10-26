@@ -2,11 +2,9 @@
 	"linkedinTasks": {
 		"username": "",
 		"password": "",
+		"userUrnId": "",
 		"startSearchPageNumber": 1,
 		"addContactsDefaultSearchKeyword": "HR",
 		"addContactsDefaultMessage": "Hi! Please add me to your contact list. Thank You!"
-	},
-	"contactsListProfileLinks": {
-
 	}
 }

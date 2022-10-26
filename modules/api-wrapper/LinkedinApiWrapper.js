@@ -40,6 +40,15 @@ module.exports = class LinkedinApiWrapper {
             })
         })
 
+        app.get('/linkedin-api-v1/account/get-my-linkedin-urn-id', async (req, res) => {
+
+            const result = await linkedinApiBuilder.getMyLinkedinUrnId();
+
+            res.json({
+                'status': result
+            })
+        })
+
         app.get('/linkedin-api-v1/account/get-people-from-search/invitable/:searchKeyword/:page', async (req, res) => {
             const result = await linkedinApiBuilder.getInvitablePeopleFromSearch(req.params.searchKeyword, req.params.page);
 

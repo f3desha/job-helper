@@ -1,4 +1,5 @@
-var {remote, ipcRenderer} = require('electron');
+const {remote, ipcRenderer} = require('electron');
+const { net } = require('electron')
 const StorageBase = require('../../../modules/storage/StorageBase');
 const Storage = new StorageBase();
 const linkedinUserConfig = Storage.get('linkedinTasks');

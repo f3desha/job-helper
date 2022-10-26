@@ -66,6 +66,13 @@ const template = [
             }
           },
           {
+            id: 'my-contacts',
+            label: 'My Contacts',
+            click (item, focusedWindow) {
+              if (focusedWindow) getMyContacts();
+            }
+          },
+          {
             id: 'linkedin-add-contacts',
             label: 'Add Contacts',
             accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
@@ -112,6 +119,10 @@ function getLinkedinAddContacts(){
 
 function getAboutProgram(){
   createSubwindow(config.subwindows.help.about_program);
+}
+
+function getMyContacts(){
+  createSubwindow(config.subwindows.linkedin_tasks.my_contacts);
 }
 
 function createLinkedinapiDemon(){
@@ -267,6 +278,12 @@ ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
     let response = await requestHelper.postRequest('http://localhost:2402/linkedin-api-v1/account/mfa-check', {'mfaCode': mfaCode});
     let res = JSON.parse(response);
     return res.status;
+});
+
+ipcMain.handle('get-linkedin-urn-id', async (event1, mfaCode) => {
+  let response = await requestHelper.getRequest('http://localhost:2402/linkedin-api-v1/account/get-my-linkedin-urn-id');
+  let res = JSON.parse(response);
+  return res.status;
 });
 
 ipcMain.handle('check-linkedinapi-status', (event1, args) => {
