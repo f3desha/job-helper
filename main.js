@@ -66,13 +66,6 @@ const template = [
             }
           },
           {
-            id: 'my-contacts',
-            label: 'My Contacts',
-            click (item, focusedWindow) {
-              if (focusedWindow) getMyContacts();
-            }
-          },
-          {
             id: 'linkedin-add-contacts',
             label: 'Add Contacts',
             accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
@@ -119,10 +112,6 @@ function getLinkedinAddContacts(){
 
 function getAboutProgram(){
   createSubwindow(config.subwindows.help.about_program);
-}
-
-function getMyContacts(){
-  createSubwindow(config.subwindows.linkedin_tasks.my_contacts);
 }
 
 function createLinkedinapiDemon(){
