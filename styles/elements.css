@@ -172,6 +172,10 @@
    position: relative;
    left: 10px;
 }
+.small-hint {
+    font-size: 9pt;
+    color: rgb(82, 82, 82);;
+}
 .green {
     color: rgb(2, 133, 0);
 }

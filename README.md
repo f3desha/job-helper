@@ -70,3 +70,4 @@
 [//]: # (## License)
 
 [CC0 1.0 (Public Domain)](LICENSE.md)
+https://registry.npmmirror.com/binary.html?path=chromium-browser-snapshots/Win_x64/

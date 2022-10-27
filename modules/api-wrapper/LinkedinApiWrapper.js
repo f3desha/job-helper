@@ -65,6 +65,22 @@ module.exports = class LinkedinApiWrapper {
             })
         })
 
+        app.get('/linkedin-api-v1/account/mynetwork/get-all-contacts-summary', async (req, res) => {
+            const result = await linkedinApiBuilder.getAllContactsSummary();
+
+            res.json({
+                'response': result.contactsNumber ?? null
+            })
+        })
+
+        app.get('/linkedin-api-v1/account/mynetwork/get-invites-sent-summary', async (req, res) => {
+            // const result = await linkedinApiBuilder.getAllContactsSummary();
+
+            res.json({
+                'response': 477
+            })
+        })
+
         app.get('/linkedin-api-v1/account/mynetwork/contacts-get-profiles', async (req, res) => {
             const result = await linkedinApiBuilder.getProfileByLink();
 

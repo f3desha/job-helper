@@ -35,13 +35,18 @@ module.exports = class LinkedinApiBuilder {
 
     async init(){
         try {
+            const chromium = require('chromium');
+            let options = new chrome.Options();
+            options.setChromeBinaryPath(chromium.path);
+            // options.addArguments('--headless');
 
+            require('chromedriver');
 
-        this.driver = new webdriver.Builder()
+            this.driver = new webdriver.Builder()
             .forBrowser('chrome')
-            // .setChromeOptions(
-            //     new chrome.Options().headless()
-            // )
+            .setChromeOptions(
+                options
+            )
             .build();
 
 
@@ -165,6 +170,18 @@ module.exports = class LinkedinApiBuilder {
         // person.profileName = await nameElement.getText();
 
         return 1;
+    }
+
+    async getAllContactsSummary() {
+        const linkedinUserConfig = Storage.get('linkedinTasks');
+
+        let contactsNumberResponse = null;
+        if(linkedinUserConfig.hasOwnProperty('incontactsPeople')) {
+            contactsNumberResponse = Object.keys(linkedinUserConfig.incontactsPeople).length;
+        }
+        return {
+            contactsNumber: contactsNumberResponse
+        };
     }
 
     async getAllContacts() {

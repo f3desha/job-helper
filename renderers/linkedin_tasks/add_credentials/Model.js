@@ -21,6 +21,9 @@ module.exports = class Model extends BaseModel {
                 mfa_send:  {
                     location: document.getElementById("mfa-send")
                 },
+                get_contacts:  {
+                    location: document.getElementById("get-contacts")
+                },
             },
             spans: {
                 login_button: {
@@ -56,6 +59,12 @@ module.exports = class Model extends BaseModel {
                 mfa_code: {
                     location: document.querySelector('#mfa-code')
                 },
+                contacts_block: {
+                    location: document.querySelector('#contacts-block')
+                },
+                contacts_number: {
+                    location: document.querySelector('#my-contacts-number')
+                }
             },
         };
 
@@ -91,10 +100,26 @@ module.exports = class Model extends BaseModel {
                 DS.get('spans','login_button').classList.add('hidden');
                 DS.get('spans','logout_button').classList.remove('hidden');
                 DS.get('spans','login_inputs').classList.add("hidden");
+                DS.get('spans','contacts_block').classList.remove('hidden');
+                let response = await ipcRenderer.invoke('get-all-contacts-summary', '');
+                let contactsNumberText = null;
+                if (response) {
+                    DS.get('spans','contacts_number').classList.remove('small-hint');
+                    contactsNumberText = response;
+                } else {
+                    DS.get('spans','contacts_number').classList.add('small-hint');
+                    contactsNumberText = 'press update';
+                }
+                DS.get('spans','contacts_number').innerHTML = contactsNumberText;
+
+
             } else {
                 DS.get('spans','logout_button').classList.add('hidden');
+                DS.get('spans','contacts_block').classList.add('hidden');
                 DS.get('spans','login_button').classList.remove('hidden');
                 DS.get('spans','login_inputs').classList.remove("hidden");
+                DS.get('spans','contacts_number').classList.add('small-hint');
+                DS.get('spans','contacts_number').innerHTML = `press update`;
             }
             updateStatus();
         }
@@ -183,6 +208,15 @@ module.exports = class Model extends BaseModel {
 
                 });
 
+            });
+        }
+
+        this.windowElements.buttons.get_contacts.init = () => {
+            DS.get('buttons','get_contacts').addEventListener("click", async function (e) {
+                DS.get('spans','validation_bar').innerHTML = 'Getting contacts. Please wait few minutes...';
+                let response = await ipcRenderer.invoke('get-all-contacts-import', '');
+                DS.get('spans','validation_bar').innerHTML = 'Contacts imported successfully!';
+                updateLoginStatus();
             });
         }
 
