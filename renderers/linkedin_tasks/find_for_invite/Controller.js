@@ -7,7 +7,7 @@ const userHelperModule = require('../../../modules/user-helper/UserHelper');
 const userHelper = new userHelperModule();
 const StorageBase = require('../../../modules/storage/StorageBase');
 const Storage = new StorageBase();
-const linkedinUserConfig = Storage.get('linkedinTasks');
+let linkedinUserConfig = Storage.get('linkedinTasks');
 
 
 const model = require('./Model');

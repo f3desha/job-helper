@@ -23,9 +23,6 @@ module.exports = class Model extends BaseModel {
                 searchFor: {
                     location: document.querySelector('#search-for')
                 },
-                contactMessage: {
-                    location: document.querySelector('#contact-message')
-                },
                 startFromPage: {
                     location: document.querySelector('#start-from-page')
                 },
@@ -41,54 +38,51 @@ module.exports = class Model extends BaseModel {
             const defaultSearchKeyword = linkedinUserConfig.addContactsDefaultSearchKeyword;
             DS.get('spans','searchFor').value = defaultSearchKeyword;
         }
-
-        this.windowElements.spans.contactMessage.init = () => {
-            const defaultAddContactsMessage = linkedinUserConfig.addContactsDefaultMessage;
-            DS.get('spans','contactMessage').value = defaultAddContactsMessage;
-        }
     
         this.windowElements.buttons.start.init = () => {
-            const login = linkedinUserConfig.username;
-            const password = linkedinUserConfig.password;
 
             DS.get('buttons','start').addEventListener("click", function (e) {
                 //Validation
                 DS.flushErrors();
 
-                if (login === '') {
-                    DS.addError('Error: Login must not be empty');
-                }
-
-                if (!String(login)
-                    .toLowerCase()
-                    .match(
-                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                )) {
-                    DS.addError('Error: Login should have email format');
-                }
-
-                if (password === '') {
-                    DS.addError('Error: Password must not be empty');
-                }
-
                 if (DS.get('spans','searchFor').value === '') {
                     DS.addError('Error: Search for must not be empty');
                 }
 
-                if (DS.get('spans','contactMessage').value === '') {
-                    DS.addError('Error: Message must not be empty');
-                }
 
                 // Execution
                 DS.validate(() => {
                     DS.get('spans','validation_bar').innerHTML = 'Running...';
                     (async function start() {
 
+                        //When start button pressed
+                        //Save inputs
                         linkedinUserConfig.startSearchPageNumber = DS.get('spans','startFromPage').value;
                         linkedinUserConfig.addContactsDefaultSearchKeyword = DS.get('spans','searchFor').value;
-                        linkedinUserConfig.addContactsDefaultMessage = DS.get('spans','contactMessage').value;
-
                         Storage.set('linkedinTasks', '', linkedinUserConfig);
+
+                        let i = null;
+                        let invitablePeople = [];
+                        for (i = linkedinUserConfig.startSearchPageNumber; i <= 100; i++) {
+                            //Go to api page and get invitable accounts from it
+                            invitablePeople = await ipcRenderer.invoke('get-invitable-people', i)
+                            invitablePeople = JSON.parse(invitablePeople);
+
+                            linkedinUserConfig = Storage.get('linkedinTasks');
+
+                            if (!linkedinUserConfig.hasOwnProperty('outcontactsPeople')) {
+                                linkedinUserConfig['outcontactsPeople'] = {};
+                            }
+
+                            Object.keys(invitablePeople).forEach(key => {
+                                linkedinUserConfig['outcontactsPeople'][key] = invitablePeople[key];
+                            });
+
+                            //Store results in outcontacts
+                            linkedinUserConfig.startSearchPageNumber++;
+                            DS.get('spans','startFromPage').value = linkedinUserConfig.startSearchPageNumber;
+                            await Storage.set('linkedinTasks', '', linkedinUserConfig);
+                        }
 
                         // let driver = new webdriver.Builder()
                         //     .forBrowser('chrome')

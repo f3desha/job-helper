@@ -66,11 +66,11 @@ const template = [
             }
           },
           {
-            id: 'linkedin-add-contacts',
-            label: 'Add Contacts',
+            id: 'find-for-invite',
+            label: 'Find for Invite...',
             accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
             click (item, focusedWindow) {
-              if (focusedWindow) getLinkedinAddContacts();
+              if (focusedWindow) getFindForInvite();
             }
           }
         ]
@@ -106,8 +106,8 @@ function getLinkedinAddCredentials(){
   createSubwindow(config.subwindows.linkedin_tasks.add_credentials);
 }
 
-function getLinkedinAddContacts(){
-  createSubwindow(config.subwindows.linkedin_tasks.add_contacts);
+function getFindForInvite(){
+  createSubwindow(config.subwindows.linkedin_tasks.find_for_invite);
 }
 
 function getAboutProgram(){
@@ -170,7 +170,7 @@ function createMainMenu(){
 function refreshMainMenu(){
   mainMenu.getMenuItemById('linkedin-login').visible = !userHelper.isLogined();
   mainMenu.getMenuItemById('linkedin-credentials').visible = userHelper.isLogined();
-  mainMenu.getMenuItemById('linkedin-add-contacts').enabled = userHelper.isLogined();
+  mainMenu.getMenuItemById('find-for-invite').enabled = userHelper.isLogined();
 }
 
 function createMainWindow () {
@@ -267,6 +267,21 @@ ipcMain.handle('linkedinapi-mfa-check', async (event1, mfaCode) => {
     let response = await requestHelper.postRequest('http://localhost:2402/linkedin-api-v1/account/mfa-check', {'mfaCode': mfaCode});
     let res = JSON.parse(response);
     return res.status;
+});
+
+ipcMain.handle('get-invitable-people', async (event1, page) => {
+  let response = await requestHelper.getRequest(`http://localhost:2402/linkedin-api-v1/account/get-people-from-search/invitable/HR/${page}`);
+  let res = JSON.parse(response);
+
+  let obj = {};
+  res.response.forEach(element => {
+    obj[element['profileLink']] = {
+      "name": element['profileName'],
+      "image": element['profileImage']
+    }
+  });
+
+  return JSON.stringify(obj);
 });
 
 ipcMain.handle('get-linkedin-urn-id', async (event1, mfaCode) => {

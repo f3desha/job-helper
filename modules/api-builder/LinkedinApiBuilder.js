@@ -145,10 +145,6 @@ module.exports = class LinkedinApiBuilder {
         const originalWindow = await this.driver.getWindowHandle();
         await this.driver.get(`https://www.linkedin.com/in/max-liashuk-aa040824b/`);
         await this.driver.executeScript('window.open("https://www.linkedin.com/in/max-liashuk-aa040824b/");');
-        await this.driver.executeScript('window.open("https://www.linkedin.com/in/max-liashuk-aa040824b/");');
-        await this.driver.executeScript('window.open("https://www.linkedin.com/in/max-liashuk-aa040824b/");');
-        await this.driver.executeScript('window.open("https://www.linkedin.com/in/max-liashuk-aa040824b/");');
-        await this.driver.executeScript('window.open("https://www.linkedin.com/in/max-liashuk-aa040824b/");');
 
         const windows = await this.driver.getAllWindowHandles();
         windows.forEach(async handle => {
@@ -156,23 +152,36 @@ module.exports = class LinkedinApiBuilder {
                 await this.driver.switchTo().window(handle);
             }
         });
-        // let person = {};
-        // let urnidElement = await this.driver.findElement(By.css('section.artdeco-card.ember-view.pv-top-card'));
-        // let urnid = await urnidElement.getAttribute('data-member-id');
-        // person.profileLink = 'https://www.linkedin.com/in/max-liashuk-aa040824b/';
-        // let photoElement = await this.driver.findElement(By.css('img.pv-top-card-profile-picture__image.pv-top-card-profile-picture__image--show.ember-view'));
-        // person.profilePhoto = await photoElement.getAttribute('src');
-        // let nameElement = await this.driver.findElement(By.css('h1.text-heading-xlarge.inline.t-24.v-align-middle.break-words'));
-        // person.profileName = await nameElement.getText();
 
         return 1;
+    }
+
+    async addInviteSingle(sendTo, message){
+        await this.driver.get(`${sendTo}`);
+        await this.driver.sleep(3000);
+
+        let inviteButton = await this.driver.findElement(By.css("div.pv-top-card-v2-ctas.display-flex.pt2 div.pvs-profile-actions div.pvs-profile-actions__action button"))
+        await this.driver.sleep(1000);
+        inviteButton.click();
+        await this.driver.sleep(1000);
+
+        let dialogWindowPersonalizeButton = this.driver.findElement(By.css("button.artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1"));
+        dialogWindowPersonalizeButton.click();
+        await this.driver.sleep(1000);
+        let textarea = this.driver.findElement(By.id("custom-message"));
+        textarea.sendKeys(message);
+
+        await this.driver.sleep(1000);
+        let sendNow = this.driver.findElement(By.css("div.artdeco-modal__actionbar.ember-view.text-align-right button.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1"));
+        await this.driver.sleep(1000);
+        sendNow.click();
     }
 
     async getAllContactsSummary() {
         const linkedinUserConfig = Storage.get('linkedinTasks');
 
         let contactsNumberResponse = null;
-        if(linkedinUserConfig.hasOwnProperty('incontactsPeople')) {
+        if (linkedinUserConfig.hasOwnProperty('incontactsPeople')) {
             contactsNumberResponse = Object.keys(linkedinUserConfig.incontactsPeople).length;
         }
         return {
@@ -182,7 +191,6 @@ module.exports = class LinkedinApiBuilder {
 
     async getInvitesSentSummary() {
         await this.driver.get(`https://www.linkedin.com/mynetwork/invitation-manager/sent/`);
-        await this.driver.sleep(1000);
         let peopleButton = await this.driver.findElement(By.id('mn-invitation-manager__invitation-facet-pills--CONNECTION'));
         let content = await peopleButton.getAttribute('aria-label');
         content = content.split('(');
@@ -232,10 +240,19 @@ module.exports = class LinkedinApiBuilder {
             let parent4 = await parent3.findElement(By.xpath("./.."));
             let a = await parent4.findElement(By.css("a.app-aware-link"));
             let profileLink = await a.getAttribute("href");
-            let b = await parent4.findElement(By.css("img.presence-entity__image"));
+            let profileImage = '';
+            let profileName = await a.getText();
 
-            let profileImage = await b.getAttribute("src");
-            let profileName = await b.getAttribute("alt");
+            await this.driver.wait(async function() {
+                return await parent4.findElement(By.css("img.presence-entity__image"));
+            }, 10000)
+                .then(async (data) => {
+                    profileImage = await data.getAttribute("src");
+                    profileName = await data.getAttribute("alt");
+                }, err => {
+                    console.log('not found img');
+                });
+
             person.profileName = profileName;
             person.profileLink = profileLink;
             person.profileImage = profileImage;

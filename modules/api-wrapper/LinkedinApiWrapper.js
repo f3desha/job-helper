@@ -57,6 +57,17 @@ module.exports = class LinkedinApiWrapper {
             })
         })
 
+        app.post('/linkedin-api-v1/account/mynetwork/add-invite', async (req, res) => {
+            const message = req.body.message;
+            const sendTo = req.body.profileLink;
+            const result = await linkedinApiBuilder.addInviteSingle(sendTo, message);
+
+            res.json({
+                'message': message,
+                'sendTo': sendTo
+            })
+        })
+
         app.get('/linkedin-api-v1/account/mynetwork/contacts-get-links', async (req, res) => {
             const result = await linkedinApiBuilder.getAllContacts();
 

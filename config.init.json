@@ -8,11 +8,11 @@
 				"width": 400,
 				"height": 280
 			},
-			"add_contacts": {
-				"id": "add_contacts",
+			"find_for_invite": {
+				"id": "find_for_invite",
 				"group": "linkedin_tasks",
 				"width": 400,
-				"height": 340
+				"height": 240
 			}
 		},
 		"help": {
@@ -20,7 +20,7 @@
 				"id": "about_program",
 				"group": "help",
 				"width": 400,
-				"height": 280
+				"height": 240
 			}
 		},
 		"main": {}
