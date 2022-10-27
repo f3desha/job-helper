@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Invite</title>
+    <link rel="stylesheet" href="../../../styles/core.css" />
+    <link rel="stylesheet" href="../../../styles/elements.css" />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+    <div class="summary">
+        <div class="box disable-select">
+            <div class="box-content">
+                <div class="input-block">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" name="contact-message" rows="4" cols="42"></textarea>
+                </div>
+            
+            </div>
+            <div class="box-footer bottom-fixed-buttons-block">
+              <div class="button" id="start">
+                Start
+              </div>
+              <div class="button" id="stop">
+                Stop
+              </div>
+              <div class="button" id="close">
+                Cancel
+              </div>
+        </div>  
+        <div class="validation-bar">
+            <span id="validation-bar-span" class="success">Please setup task options and press Start</span>
+        </div>
+    </div>
+    </div>
+    <script src="./Controller.js"></script>
+</body>
+</html>

@@ -122,6 +122,10 @@ module.exports = class LinkedinApiWrapper {
         await linkedinApiBuilder.logout();
     }
 
+    async goToMain() {
+        await linkedinApiBuilder.goToMain();
+    }
+
     async checkDriverHealth() {
         return await linkedinApiBuilder.checkDriverHealth();
     }

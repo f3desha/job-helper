@@ -156,6 +156,10 @@ module.exports = class LinkedinApiBuilder {
         return 1;
     }
 
+    async goToMain() {
+        return await this.driver.get(`https://www.linkedin.com`);
+    }
+
     async addInviteSingle(sendTo, message){
         await this.driver.get(`${sendTo}`);
         await this.driver.sleep(3000);

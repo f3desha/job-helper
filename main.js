@@ -73,6 +73,13 @@ const template = [
             click (item, focusedWindow) {
               if (focusedWindow) getFindForInvite();
             }
+          },
+          {
+            id: 'send-invite',
+            label: 'Send Invite',
+            click (item, focusedWindow) {
+               if (focusedWindow) getSendLinkedinInvite();
+            }
           }
         ]
       },
@@ -109,6 +116,10 @@ function getLinkedinConnectionStatus(){
 
 function getFindForInvite(){
   createSubwindow(config.subwindows.linkedin_tasks.find_for_invite);
+}
+
+function  getSendLinkedinInvite(){
+  createSubwindow(config.subwindows.linkedin_tasks.send_invite);
 }
 
 function getAboutProgram(){
@@ -316,6 +327,10 @@ ipcMain.handle('check-linkedinapi-status', (event1, args) => {
 
 ipcMain.handle('linkedinapi-stop', (event1, args) => {
   return linkedinApiWrapper.stop();
+});
+
+ipcMain.handle('linkedinapi-cancel-action', (event1, args) => {
+  return linkedinApiWrapper.goToMain();
 });
 
 autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {
