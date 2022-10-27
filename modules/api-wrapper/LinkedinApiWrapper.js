@@ -74,10 +74,10 @@ module.exports = class LinkedinApiWrapper {
         })
 
         app.get('/linkedin-api-v1/account/mynetwork/get-invites-sent-summary', async (req, res) => {
-            // const result = await linkedinApiBuilder.getAllContactsSummary();
+            const result = await linkedinApiBuilder.getInvitesSentSummary();
 
             res.json({
-                'response': 477
+                'response': result
             })
         })
 

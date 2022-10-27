@@ -35,18 +35,14 @@ module.exports = class LinkedinApiBuilder {
 
     async init(){
         try {
-            const chromium = require('chromium');
             let options = new chrome.Options();
-            options.setChromeBinaryPath(chromium.path);
             // options.addArguments('--headless');
 
             require('chromedriver');
 
             this.driver = new webdriver.Builder()
             .forBrowser('chrome')
-            .setChromeOptions(
-                options
-            )
+            .setChromeOptions(options)
             .build();
 
 
@@ -182,6 +178,16 @@ module.exports = class LinkedinApiBuilder {
         return {
             contactsNumber: contactsNumberResponse
         };
+    }
+
+    async getInvitesSentSummary() {
+        await this.driver.get(`https://www.linkedin.com/mynetwork/invitation-manager/sent/`);
+        await this.driver.sleep(1000);
+        let peopleButton = await this.driver.findElement(By.id('mn-invitation-manager__invitation-facet-pills--CONNECTION'));
+        let content = await peopleButton.getAttribute('aria-label');
+        content = content.split('(');
+        content = content[1].split(')');
+        return content[0];
     }
 
     async getAllContacts() {

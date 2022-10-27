@@ -275,6 +275,13 @@ ipcMain.handle('get-linkedin-urn-id', async (event1, mfaCode) => {
   return res.status;
 });
 
+ipcMain.handle('check-invites-sent', async (event1, arg) => {
+  let response = await requestHelper.getRequest('http://localhost:2402/linkedin-api-v1/account/mynetwork/get-invites-sent-summary');
+  let res = JSON.parse(response);
+  return res.response;
+});
+
+
 ipcMain.handle('get-all-contacts-summary', async (event1, arg) => {
   let response = await requestHelper.getRequest('http://localhost:2402/linkedin-api-v1/account/mynetwork/get-all-contacts-summary');
   let res = JSON.parse(response);

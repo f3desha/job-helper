@@ -64,6 +64,12 @@ module.exports = class Model extends BaseModel {
                 },
                 contacts_number: {
                     location: document.querySelector('#my-contacts-number')
+                },
+                invites_sent_block: {
+                    location: document.querySelector('#invites-sent-block')
+                },
+                invites_sent_number: {
+                    location: document.querySelector('#invites-sent-number')
                 }
             },
         };
@@ -101,6 +107,8 @@ module.exports = class Model extends BaseModel {
                 DS.get('spans','logout_button').classList.remove('hidden');
                 DS.get('spans','login_inputs').classList.add("hidden");
                 DS.get('spans','contacts_block').classList.remove('hidden');
+
+
                 let response = await ipcRenderer.invoke('get-all-contacts-summary', '');
                 let contactsNumberText = null;
                 if (response) {
@@ -112,12 +120,18 @@ module.exports = class Model extends BaseModel {
                 }
                 DS.get('spans','contacts_number').innerHTML = contactsNumberText;
 
+                DS.get('spans','invites_sent_block').classList.remove("hidden");
+                ipcRenderer.invoke('check-invites-sent', '')
+                    .then(function(invitesSent){
+                        DS.get('spans','invites_sent_number').innerHTML = invitesSent;
+                    })
 
             } else {
                 DS.get('spans','logout_button').classList.add('hidden');
                 DS.get('spans','contacts_block').classList.add('hidden');
                 DS.get('spans','login_button').classList.remove('hidden');
                 DS.get('spans','login_inputs').classList.remove("hidden");
+                DS.get('spans','invites_sent_block').classList.add("hidden");
                 DS.get('spans','contacts_number').classList.add('small-hint');
                 DS.get('spans','contacts_number').innerHTML = `press update`;
             }
