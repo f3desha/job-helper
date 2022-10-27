@@ -2,8 +2,8 @@
 	"appPath": "",
 	"subwindows": {
 		"linkedin_tasks": {
-			"add_credentials": {
-				"id": "add_credentials",
+			"connection_status": {
+				"id": "connection_status",
 				"group": "linkedin_tasks",
 				"width": 400,
 				"height": 280

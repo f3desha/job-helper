@@ -54,21 +54,22 @@ const template = [
           {
             id: 'linkedin-login',
             label: 'Login...',
+            accelerator: process.platform === 'darwin' ? 'Alt+L' : 'Alt+L',
             click (item, focusedWindow) {
-              if (focusedWindow) getLinkedinAddCredentials();
+              if (focusedWindow) getLinkedinConnectionStatus();
             }
           },
           {
-            id: 'linkedin-credentials',
-            label: 'Credentials',
+            id: 'linkedin-connection-status',
+            label: 'Connection Status',
+            accelerator: process.platform === 'darwin' ? 'Alt+L' : 'Alt+L',
             click (item, focusedWindow) {
-              if (focusedWindow) getLinkedinAddCredentials();
+              if (focusedWindow) getLinkedinConnectionStatus();
             }
           },
           {
             id: 'find-for-invite',
             label: 'Find for Invite...',
-            accelerator: process.platform === 'darwin' ? 'Alt+A' : 'Alt+A',
             click (item, focusedWindow) {
               if (focusedWindow) getFindForInvite();
             }
@@ -102,8 +103,8 @@ mainMenu = Menu.buildFromTemplate(template);
 
 /***********FUNCTIONS******** */
 
-function getLinkedinAddCredentials(){
-  createSubwindow(config.subwindows.linkedin_tasks.add_credentials);
+function getLinkedinConnectionStatus(){
+  createSubwindow(config.subwindows.linkedin_tasks.connection_status);
 }
 
 function getFindForInvite(){
@@ -169,7 +170,7 @@ function createMainMenu(){
 
 function refreshMainMenu(){
   mainMenu.getMenuItemById('linkedin-login').visible = !userHelper.isLogined();
-  mainMenu.getMenuItemById('linkedin-credentials').visible = userHelper.isLogined();
+  mainMenu.getMenuItemById('linkedin-connection-status').visible = userHelper.isLogined();
   mainMenu.getMenuItemById('find-for-invite').enabled = userHelper.isLogined();
 }
 
