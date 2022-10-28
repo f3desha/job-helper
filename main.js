@@ -96,14 +96,14 @@ const template = [
       },
     ]
   },
-  {
-    label: 'View',
-    submenu: [
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { role: 'toggleDevTools' },
-    ]
-  }
+  // {
+  //   label: 'View',
+  //   submenu: [
+  //     { role: 'reload' },
+  //     { role: 'forceReload' },
+  //     { role: 'toggleDevTools' },
+  //   ]
+  // }
 ]
 mainMenu = Menu.buildFromTemplate(template);
 /*******MENU TEMPLATE ENDS*****************/
@@ -183,6 +183,7 @@ function refreshMainMenu(){
   mainMenu.getMenuItemById('linkedin-login').visible = !userHelper.isLogined();
   mainMenu.getMenuItemById('linkedin-connection-status').visible = userHelper.isLogined();
   mainMenu.getMenuItemById('find-for-invite').enabled = userHelper.isLogined();
+  mainMenu.getMenuItemById('send-invite').enabled = userHelper.isLogined();
 }
 
 function createMainWindow () {
@@ -331,6 +332,14 @@ ipcMain.handle('linkedinapi-stop', (event1, args) => {
 
 ipcMain.handle('linkedinapi-cancel-action', (event1, args) => {
   return linkedinApiWrapper.goToMain();
+});
+
+ipcMain.handle('send-linkedin-invitation', async (event1, args) => {
+  console.log(args);
+  let response = await requestHelper.postRequest('http://localhost:2402/linkedin-api-v1/account/mynetwork/add-invite',
+      {'message': args.message, 'profileLink': args.profileLink});
+  let res = JSON.parse(response);
+  return res.status;
 });
 
 autoUpdater.on('update-available', (_event, releaseNotes, releaseName) => {

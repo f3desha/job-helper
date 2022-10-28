@@ -24,6 +24,9 @@ module.exports = class Model extends BaseModel {
                 get_contacts:  {
                     location: document.getElementById("get-contacts")
                 },
+                get_invites_sent: {
+                    location: document.getElementById("get-invites-sent")
+                }
             },
             spans: {
                 login_button: {
@@ -121,10 +124,6 @@ module.exports = class Model extends BaseModel {
                 DS.get('spans','contacts_number').innerHTML = contactsNumberText;
 
                 DS.get('spans','invites_sent_block').classList.remove("hidden");
-                ipcRenderer.invoke('check-invites-sent', '')
-                    .then(function(invitesSent){
-                        DS.get('spans','invites_sent_number').innerHTML = invitesSent;
-                    })
 
             } else {
                 DS.get('spans','logout_button').classList.add('hidden');
@@ -231,6 +230,15 @@ module.exports = class Model extends BaseModel {
                 let response = await ipcRenderer.invoke('get-all-contacts-import', '');
                 DS.get('spans','validation_bar').innerHTML = 'Contacts imported successfully!';
                 updateLoginStatus();
+            });
+        }
+
+        this.windowElements.buttons.get_invites_sent.init = () => {
+            DS.get('buttons','get_invites_sent').addEventListener("click", async function (e) {
+                ipcRenderer.invoke('check-invites-sent', '')
+                    .then(function(invitesSent){
+                        DS.get('spans','invites_sent_number').innerHTML = invitesSent;
+                    })
             });
         }
 
