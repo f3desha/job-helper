@@ -1,21 +1,24 @@
 // Modules to control application life and create native browser window
+
 const { app, BrowserWindow, Menu, dialog, net } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
 const ipcMain = require('electron').ipcMain;
+
 const fs = require("fs");
+const path = require('path');
+appInit();
+
 const linkedinApiWrapperModule = require("./modules/api-wrapper/LinkedinApiWrapper");
 const linkedinApiWrapper = new linkedinApiWrapperModule();
 const requestHelperModule = require("./modules/request-helper/RequestHelper");
 const requestHelper = new requestHelperModule();
-const path = require('path');
 const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule(linkedinApiWrapper);
 const isMac = process.platform === 'darwin'
 let mainMenu = null;
 
-appInit();
 
 const config = require('./config.json');
 
@@ -153,7 +156,7 @@ function createSubwindow(config){
   return subWindow;
 }
 
-function appInit() {
+async function appInit() {
   if (!fs.existsSync(app.getAppPath() + path.sep + 'config.json')) {
     fs.copyFileSync(app.getAppPath() + path.sep + 'config.init.json', app.getAppPath() + path.sep + 'config.json');
   }

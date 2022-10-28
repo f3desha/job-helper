@@ -94,7 +94,7 @@ module.exports = class Model extends BaseModel {
             let response = await ipcRenderer.invoke('get-linkedin-urn-id', '');
             let userUrnId = response;
             linkedinUserConfig.userUrnId = userUrnId;
-
+            Storage.set('linkedinTasks', '', linkedinUserConfig);
             updateLoginStatus();
             return true;
         }
@@ -153,10 +153,10 @@ module.exports = class Model extends BaseModel {
             DS.get('buttons','mfa_send').addEventListener("click", function (e) {
                 DS.get('spans','validation_bar').innerHTML = 'Sending MFA code...';
                 ipcRenderer.invoke('linkedinapi-mfa-check', DS.get('spans','mfa_code').value)
-                    .then((result) => {
+                    .then(async (result) => {
                         switch (result) {
                             case 'loginSuccessfull':
-                                onLoginSuccess();
+                                await onLoginSuccess();
                                 break;
                         }
                     })

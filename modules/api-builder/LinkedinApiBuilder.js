@@ -164,20 +164,20 @@ module.exports = class LinkedinApiBuilder {
         await this.driver.get(`${sendTo}`);
         await this.driver.sleep(3000);
 
-        let inviteButton = await this.driver.findElement(By.css("div.pv-top-card-v2-ctas.display-flex.pt2 div.pvs-profile-actions div.pvs-profile-actions__action button"))
-        await this.driver.sleep(1000);
+        let inviteButton = await this.driver.findElement(By.css("div.pv-top-card-v2-ctas.display-flex div.pvs-profile-actions div.pvs-profile-actions__action button"))
+        await this.driver.sleep(2000);
         inviteButton.click();
-        await this.driver.sleep(1000);
+        await this.driver.sleep(2000);
 
         let dialogWindowPersonalizeButton = this.driver.findElement(By.css("button.artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1"));
         dialogWindowPersonalizeButton.click();
-        await this.driver.sleep(1000);
+        await this.driver.sleep(2000);
         let textarea = this.driver.findElement(By.id("custom-message"));
         textarea.sendKeys(message);
 
-        await this.driver.sleep(1000);
+        await this.driver.sleep(2000);
         let sendNow = this.driver.findElement(By.css("div.artdeco-modal__actionbar.ember-view.text-align-right button.artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1"));
-        await this.driver.sleep(1000);
+        await this.driver.sleep(2000);
         sendNow.click();
     }
 

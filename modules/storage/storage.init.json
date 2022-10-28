@@ -5,6 +5,10 @@
 		"userUrnId": "",
 		"startSearchPageNumber": 1,
 		"addContactsDefaultSearchKeyword": "HR",
-		"addContactsDefaultMessage": "Hi! Please add me to your contact list. Thank You!"
+		"addContactsDefaultMessage": "Hi! Please add me to your contact list. Thank You!",
+		"inviteDailyLimit": 0,
+		"lastInviteRunDate": "",
+		"incontactsPeople": {},
+		"outcontactsPeople": {}
 	}
 }

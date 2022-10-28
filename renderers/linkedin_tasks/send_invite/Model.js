@@ -49,20 +49,45 @@ module.exports = class Model extends BaseModel {
                     DS.get('spans','validation_bar').innerHTML = 'Running...';
                     (async function start() {
                         linkedinUserConfig.addContactsDefaultMessage = DS.get('spans','contactMessage').value;
-                        Storage.set('linkedinTasks', '', linkedinUserConfig);
+                        var today = new Date();
+                        var dd = String(today.getDate()).padStart(2, '0');
+                        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        var yyyy = today.getFullYear();
 
-                        //Get all invites list
-                        let invitesCount = Object.keys(linkedinUserConfig.outcontactsPeople).length;
-                        //For every invite init event of sending invitation
-                        for (let link in linkedinUserConfig.outcontactsPeople) {
-                            let invitationResult = await ipcRenderer.invoke('send-linkedin-invitation', {
-                                message: DS.get('spans','contactMessage').value,
-                                profileLink: link
-                            })
+                        let allowedToRun = false;
+                        if (linkedinUserConfig.lastInviteRunDate !== `${dd}-${mm}-${yyyy}`) {
+                            //New day started. Reset limits and run
+                            linkedinUserConfig.inviteDailyLimit = 20;
+                            allowedToRun = true;
+                        }
 
-                            //After invitation successfully sent , remove it from invites list
-                            delete linkedinUserConfig.outcontactsPeople[link];
+                        if (linkedinUserConfig.lastInviteRunDate === `${dd}-${mm}-${yyyy}` && linkedinUserConfig.inviteDailyLimit > 0) {
+                            allowedToRun = true;
+                        }
+
+                        if (allowedToRun){
+                            linkedinUserConfig.lastInviteRunDate = `${dd}-${mm}-${yyyy}`;
                             Storage.set('linkedinTasks', '', linkedinUserConfig);
+
+                            //Get all invites list
+                            let invitesCount = Object.keys(linkedinUserConfig.outcontactsPeople).length;
+                            //For every invite init event of sending invitation
+                            for (let link in linkedinUserConfig.outcontactsPeople) {
+
+                                if (!(linkedinUserConfig.lastInviteRunDate === `${dd}-${mm}-${yyyy}` && linkedinUserConfig.inviteDailyLimit > 0)){
+                                    //Limit not exceeded
+                                    break;
+                                }
+                                let invitationResult = await ipcRenderer.invoke('send-linkedin-invitation', {
+                                    message: DS.get('spans','contactMessage').value,
+                                    profileLink: link
+                                })
+
+                                //After invitation successfully sent , remove it from invites list
+                                delete linkedinUserConfig.outcontactsPeople[link];
+                                linkedinUserConfig.inviteDailyLimit--;
+                                Storage.set('linkedinTasks', '', linkedinUserConfig);
+                            }
                         }
 
                     })();
