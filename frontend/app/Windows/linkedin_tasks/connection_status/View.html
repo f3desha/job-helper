@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Status</title>
+    <link rel="stylesheet" href="../../../styles/core.css" />
+    <link rel="stylesheet" href="../../../styles/elements.css" />
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+    <div class="summary">
+        <div class="box disable-select">
+            <div class="box-content">
+                <div class="input-block" id="status-block">
+                    <div class="left-subblock">Status:</div>
+                    <div id="login-status" class="right-subblock"></div>
+                </div>
+                <div class="input-block" id="contacts-block">
+                    <div class="left-subblock">My Contacts:</div>
+                    <div id="my-contacts-number" class="right-subblock"></div>
+                    <div class="short-button" id="get-contacts">
+                        Update
+                    </div>
+                </div>
+                <div class="input-block" id="invites-sent-block">
+                    <div class="left-subblock">Invites sent:</div>
+                    <div id="invites-sent-number" class="right-subblock"></div>
+                    <div class="short-button" id="get-invites-sent">
+                        Update
+                    </div>
+                </div>
+                <div id="login-inputs">
+                    <div class="input-block" id="login-block">
+                        Login <input id="login" type="text">
+                    </div>
+                    <div class="input-block" id="password-block">
+                        Password <input id="password" type="password">
+                    </div>
+                    <div class="input-block invisible" id="mfa-code-block">
+                        MFA Code <div class="short-button" id="mfa-send">
+                        Send MFA
+                    </div>&nbsp;<input maxlength="6" id="mfa-code" class="short-input" type="text">
+                </div>
+
+              </div>
+            
+            </div>
+            <div class="box-footer bottom-fixed-buttons-block">
+              <div class="button" id="login-button">
+                Login
+              </div>
+                <div class="button" id="logout-button">
+                    Logout
+                </div>
+              <div class="button" id="close">
+                Close
+              </div>
+        </div>  
+        <div class="validation-bar">
+            <span id="validation-bar-span" class="success">Please add credentials and press Login</span>
+        </div>
+    </div>
+    </div>
+    <script src="./Controller.js"></script>
+</body>
+</html>
