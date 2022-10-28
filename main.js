@@ -8,6 +8,13 @@ const ipcMain = require('electron').ipcMain;
 
 const fs = require("fs");
 const path = require('path');
+
+const HookServer = require('./backend/base/EventLayer/HookServer');
+const HookServerInstance = new HookServer();
+ipcMain.handle('event:createListener', async (event1, eventSignature) => {
+  return await HookServerInstance.createDynamicListener(eventSignature);
+});
+
 appInit();
 
 const linkedinApiWrapperModule = require("./modules/api-wrapper/LinkedinApiWrapper");
@@ -21,6 +28,7 @@ let mainMenu = null;
 
 
 const config = require('./config.json');
+const schema = require("./backend/app/EventLayer/hooks/my/custom/namespace/SampleHook");
 
 /********MENU TEMPLATE START *************** */
 const template = [
@@ -149,7 +157,7 @@ function createSubwindow(config){
   subWindow.setIcon(path.join(__dirname, '/files/icon.png'));
   subWindow.removeMenu();
   subWindow.loadFile(`./renderers/${config.group}/${config.id}/View.html`);
-  // subWindow.webContents.openDevTools();
+  subWindow.webContents.openDevTools();
   subWindow.once('ready-to-show', () => {
     subWindow.show()
   });
@@ -264,6 +272,8 @@ app.whenReady().then(() => {
 app.on('window-all-closed', async () => {
   if (process.platform !== 'darwin') app.quit()
 })
+
+
 
 ipcMain.on('login-event', function(event1, args) {
     refreshMainMenu();

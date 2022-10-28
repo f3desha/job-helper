@@ -49,8 +49,9 @@ module.exports = class Model extends BaseModel {
         this.windowElements.buttons.close.init = () => {
 
             DS.get('buttons','close').addEventListener("click", function (e) {
-                let window = require('@electron/remote').getCurrentWindow();
-                window.close();
+                HookClientInstance.invoke();
+                // let window = require('@electron/remote').getCurrentWindow();
+                // window.close();
             });
         }
 
