@@ -9,7 +9,7 @@ const ipcMain = require('electron').ipcMain;
 const fs = require("fs");
 const path = require('path');
 
-const HookServer = require('./backend/base/EventLayer/HookServer');
+const HookServer = require('./backend/base/Morgan/server');
 const HookServerInstance = new HookServer();
 ipcMain.handle('event:createListener', async (event1, eventSignature) => {
   return await HookServerInstance.createDynamicListener(eventSignature);
@@ -28,7 +28,7 @@ let mainMenu = null;
 
 
 const config = require('./config.json');
-const schema = require("./backend/app/EventLayer/hooks/my/custom/namespace/SampleHook");
+const schema = require("./backend/app/Morgan/hooks/my/custom/namespace/SampleHook");
 
 /********MENU TEMPLATE START *************** */
 const template = [

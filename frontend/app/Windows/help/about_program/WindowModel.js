@@ -1,7 +1,7 @@
 const BaseModel = require("../../../modules/Base/BaseModel");
 var {remote} = require('electron');
 const programConfig = require('../../../package.json');
-const HookClient = require('../../../frontend/base/EventLayer/HookClient');
+const HookClient = require('../../../frontend/base/Events/HookClient');
 const HookClientInstance = new HookClient();
 
 module.exports = class Model extends BaseModel {

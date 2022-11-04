@@ -1,5 +1,5 @@
 const {ipcRenderer} = require('electron');
-const HookServer = require("../../../backend/base/EventLayer/HookServer");
+const HookServer = require("../../../backend/base/Morgan/server");
 
 module.exports = class HookClient {
 
