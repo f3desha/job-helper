@@ -1,7 +1,7 @@
 const {ipcRenderer} = require('electron');
 const HookServer = require("../../../backend/base/Morgan/server");
 
-module.exports = class HookClient {
+module.exports = class MorganClient {
 
     async invoke(eventSignature = 'my.custom.namespace:Sample:sendMessage') {
         //set handler

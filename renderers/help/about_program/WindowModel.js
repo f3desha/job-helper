@@ -1,8 +1,8 @@
 const BaseModel = require("../../../modules/Base/BaseModel");
 var {remote} = require('electron');
 const programConfig = require('../../../package.json');
-const HookClient = require('../../../frontend/base/Morgan/client');
-const HookClientInstance = new HookClient();
+const MorganClient = require('../../../frontend/base/Morgan/client');
+const Morgan = new MorganClient();
 
 module.exports = class Model extends BaseModel {
     constructor(){
@@ -53,7 +53,7 @@ module.exports = class Model extends BaseModel {
         this.windowElements.buttons.close.init = () => {
 
             DS.get('buttons','close').addEventListener("click", function (e) {
-                HookClientInstance.invoke()
+                Morgan.invoke()
                 // let window = require('@electron/remote').getCurrentWindow();
                 // window.close();
             });

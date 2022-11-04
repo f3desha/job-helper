@@ -9,10 +9,10 @@ const ipcMain = require('electron').ipcMain;
 const fs = require("fs");
 const path = require('path');
 
-const HookServer = require('./backend/base/Morgan/server');
-const HookServerInstance = new HookServer();
+const MorganServer = require('./backend/base/Morgan/server');
+const Morgan = new MorganServer();
 ipcMain.handle('event:createListener', async (event1, eventSignature) => {
-  return await HookServerInstance.createDynamicListener(eventSignature);
+  return await Morgan.createDynamicListener(eventSignature);
 });
 
 appInit();
