@@ -15,11 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
 
-const x = require('../../app/InteractionLayer/linkedin-api-v1/my-account/access/login/Router');
-const y = require('../../app/InteractionLayer/linkedin-api-v1/my-account/access/Router')
 
-app.use('/linkedin-api-v1/my-account/access/login', x);
-app.use('/linkedin-api-v1/my-account/access', y);
 build();
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`)
@@ -28,7 +24,7 @@ app.listen(PORT, () => {
 async function build() {
     let routers = [];
     //Traverse all folders recursively and find all Router.js files in
-    const allFiles = await getFiles(`..${path.sep}..${path.sep}app${path.sep}InteractionLayer`);
+    const allFiles = await getFiles(`..${path.sep}..${path.sep}app${path.sep}Traversa`);
 
     //Based on found, build dynamic array of paths to this files
     for (let i = 0; i < allFiles.length; i++) {
@@ -46,7 +42,8 @@ async function build() {
 
     //Enjoy
     for (let i = 0; i < routersInstances.length; i++) {
-        app.use(routers[i].pathForExpress, routersInstances[i]);
+        routers[i].pathForExpress = routers[i].pathForExpress.replaceAll(path.sep,'/')
+            app.use(routers[i].pathForExpress,routersInstances[i]);
     }
 }
 
@@ -76,11 +73,14 @@ async function getFiles(dir, originalPath, excludedFolders = [], excludedFiles =
 
 async function buildUsableRouter(pathToRouter){
     let parts = pathToRouter.split(path.sep);
-    let short = pathToRouter.split('InteractionLayer');
+    let short = pathToRouter.split('Traversa');
+    let b = short[1].split(path.sep);
+    b.pop();
+    let pfe = b.join(path.sep);
 
     return {
         fileName: parts.pop(),
         pathToRouter: parts.join(path.sep),
-        pathForExpress: short[1]
+        pathForExpress: pfe
     };
 }
