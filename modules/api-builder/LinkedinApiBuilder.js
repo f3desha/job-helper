@@ -164,7 +164,7 @@ module.exports = class LinkedinApiBuilder {
         await this.driver.get(`${sendTo}`);
         await this.driver.sleep(3000);
 
-        let inviteButton = await this.driver.findElement(By.css("div.pv-top-card-v2-ctas.display-flex div.pvs-profile-actions div.pvs-profile-actions__action button"))
+        let inviteButton = await this.driver.findElement(By.css("div.pv-top-card-v2-ctas div.pvs-profile-actions div.pvs-profile-actions__action button"))
         await this.driver.sleep(2000);
         inviteButton.click();
         await this.driver.sleep(2000);
