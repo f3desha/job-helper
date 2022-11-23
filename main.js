@@ -1,6 +1,6 @@
 // Modules to control application life and create native browser window
 
-const { app, BrowserWindow, Menu, dialog, net } = require('electron');
+const { app, BrowserWindow, Menu, dialog, net, Tray } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const remoteMain = require("@electron/remote/main");
 remoteMain.initialize()
@@ -18,6 +18,7 @@ const userHelperModule = require('./modules/user-helper/UserHelper');
 const userHelper = new userHelperModule(linkedinApiWrapper);
 const isMac = process.platform === 'darwin'
 let mainMenu = null;
+let subwindows = [];
 
 
 const config = require('./config.json');
@@ -153,6 +154,7 @@ function createSubwindow(config){
   subWindow.once('ready-to-show', () => {
     subWindow.show()
   });
+  subwindows.push(subWindow);
   return subWindow;
 }
 
@@ -219,6 +221,33 @@ function createMainWindow () {
   mainWindow.on('close', async () => {
     await linkedinApiWrapper.stop();
   })
+
+  let tray = null
+  tray = new Tray(path.join(__dirname, '/files/icon.png'))
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Close', role: 'quit' },
+  ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+
+
+  tray.on('click', function(e){
+    if (!mainWindow.isVisible()) {
+      mainWindow.maximize();
+      mainWindow.show();
+      subwindows.forEach(function(subwindow){
+        subwindow.show();
+      })
+    }
+  });
+
+  mainWindow.on('minimize',function (event){
+    event.preventDefault();
+    mainWindow.hide();
+    subwindows.forEach(function(subwindow){
+      subwindow.hide();
+    })
+  });
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
